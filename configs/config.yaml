@@ -27,7 +27,7 @@ preprocess:
 # Enhancement is bonus/gated and is not justified for the clean born-digital corpus.
 enhance: {enabled: false, model: "none", type: "none"}
 
-# A2 stages 2-4 are intentionally left as planned settings. They are implemented in later steps.
+# A2 vision stages use pinned, reproducible checkpoints; indexing remains in the next step.
 layout:
   model: "docling-project/docling-layout-heron"
   revision: "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"
@@ -39,7 +39,48 @@ layout:
   manifest_path: data/interim/layout/regions.jsonl
   save_debug: false
   debug_dir: data/interim/layout/debug
-ocr: {model: "ibm-granite/granite-docling-258M", finetune: true}
+ocr:
+  model: "docling-project/granite-docling-2stage-258m"
+  revision: "12bb780c5b56af33e255c83719394e6d0be2227e"
+  device: cuda
+  dtype: auto
+  page_manifest_path: data/interim/pages.jsonl
+  layout_manifest_path: data/interim/layout/regions.jsonl
+  manifest_path: data/interim/ocr/chunks.jsonl
+  crop_padding: 12
+  min_crop_height: 96
+  location_scale: 500
+  skip_kinds: [figure]
+  quality_profile: "adaptive_bbox_retry_v2"
+  max_new_tokens: 384
+  min_new_tokens: 24
+  estimated_line_height: 44
+  estimated_char_width: 18
+  retry_repetition_penalty: 1.08
+  retry_no_repeat_ngram_size: 4
+  max_retries: 1
+  empty_cache_every: 8
+  token_limits:
+    heading: 64
+    section_header: 64
+    title: 64
+    caption: 192
+    formula: 224
+    table: 384
+    code: 256
+    list_item: 192
+    text: 256
+    default: 192
+  resume: true
+  overwrite: false
+  max_regions: 0
+  save_debug: false
+  debug_dir: data/interim/ocr/debug
+  prompts:
+    default: "Convert this page to docling."
+    formula: "<formula>"
+    table: "<otsl>"
+    code: "<code>"
 chunk: {strategy: "structure_aware", chunk_tokens: 384, overlap: 48}
 embed: {model: "BAAI/bge-m3", dim: 1024, normalize: true}
 index: {type: "faiss:flat_ip"}

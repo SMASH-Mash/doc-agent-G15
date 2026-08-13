@@ -1,12 +1,66 @@
 # THE place you set models & parameters. Code reads only from here.
 seed: 42
-device: cuda
+device: auto     # ingest/vision/index code auto-detects cuda if torch.cuda.is_available() else cpu
 
-enhance:   {enabled: true,  model: "unet_small", type: "diffusion"}   # or "vae" / "none"
-layout:    {model: "detectron2:layout", score_thr: 0.5}
-ocr:       {model: "microsoft/trocr-base-printed", finetune: true}    # BASELINE = pretrained OCR
-embed:     {model: "sentence-transformers/all-MiniLM-L6-v2", dim: 384}
-index:     {type: "faiss:hnsw", chunk_tokens: 256, overlap: 32}
+# dev.max_pages: 0 = process the full corpus (the real A2 deliverable -- run on Kaggle T4x2 GPU,
+# set this to 0 there). A small positive number = fast local CPU smoke-test mode, stratified
+# evenly across the 4 books. Measured on this CPU dev machine: Nougat OCR alone runs ~5-8s/region
+# after model warmup (longer for tables), so keep this genuinely small for local iteration --
+# 4 was verified end-to-end (ingest->layout->OCR->PII->chunk->embed->store) in a few minutes;
+# 20 pages would already be well over an hour on CPU alone. Bump it up only on a GPU runtime.
+dev:       {max_pages: 4}
+
+enhance:   {enabled: false, model: "unet_small", type: "diffusion"}   # out of scope for us — A1 Section 6:
+                                                                       # all 4 sources are clean, born-digital
+                                                                       # PDFs rasterised at 300dpi, no repair needed.
+layout:    {model: "juliozhao/DocLayout-YOLO-DocStructBench", score_thr: 0.4, revision: "8c3299a30b8ff29a1503c4431b035b93220f7b11"}
+                                                                       # pretrained doc-layout
+                                                                       # model (pip extra "layout-yolo");
+                                                                       # falls back to a PyMuPDF native
+                                                                       # block/table/image heuristic when
+                                                                       # that extra isn't installed (see
+                                                                       # vision/layout.py + design_choices.md).
+                                                                       # revision: pinned HF commit SHA (not a
+                                                                       # movable branch/tag) -- fixes bandit's
+                                                                       # B615 "unsafe HF download" finding
+                                                                       # (CI's security.yml gate) and protects
+                                                                       # against the upstream repo's weights
+                                                                       # changing under us between runs.
+ocr:       {model: "facebook/nougat-small", finetune: false, revision: "dced72ae7bcdfcb82a9ef55543a90a7a5e4d32e6"}
+                                                                       # BASELINE = pretrained math-aware
+                                                                       # vision-language OCR (E25: math /
+                                                                       # scientific notation data speciality)
+                                                                       # revision: pinned HF commit SHA, see
+                                                                       # layout.revision's comment above.
+embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 32, revision: "e8c3b32edf5434bc2275fc9bab85f82640a19130"}
+                                                                       # batch_size: was pinned to 1 out of an
+                                                                       # earlier (wrong) hypothesis that OCR+
+                                                                       # embed batching caused this dev machine's
+                                                                       # crash. Root cause is now precisely
+                                                                       # isolated -- see index.type below, it
+                                                                       # was faiss IndexHNSWFlat, not batching or
+                                                                       # OCR/embed interaction -- re-verified with
+                                                                       # the flat index, so raised to 32: mpnet-base
+                                                                       # (~420MB) batched at 32x256-token chunks is
+                                                                       # a trivial fraction of an 8GB card's VRAM
+                                                                       # (and negligible on CPU too), so this is
+                                                                       # free throughput either way.
+index:     {type: "faiss:flat", chunk_tokens: 256, overlap: 32}
+                                                                       # faiss:flat, not faiss:hnsw: live,
+                                                                       # user-supervised debugging isolated a
+                                                                       # reproducible native crash (Windows
+                                                                       # STATUS_ACCESS_VIOLATION) inside
+                                                                       # faiss-cpu 1.8.0's IndexHNSWFlat.add()
+                                                                       # itself on this machine, confirmed with a
+                                                                       # bare numpy+faiss repro (zero ML models
+                                                                       # involved) -- so it was never the OCR/
+                                                                       # embed interaction earlier hypotheses
+                                                                       # blamed. IndexFlatIP does not crash on
+                                                                       # identical data; exact (not approximate)
+                                                                       # cosine search is fast enough at our
+                                                                       # scale that dropping HNSW costs nothing
+                                                                       # observable. See index/store.py + Stage 4
+                                                                       # row in design_choices.md.
 retrieve:  {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "cross-encoder/ms-marco-MiniLM-L6-v2"}   # k_step/k_max/weak_threshold drive evidence-gated re-search
 agent:     {max_steps: 8, autonomy: "act-with-approval", budget_usd: 0.05}
 rl:        {algo: "ppo", train_policy: false}                         # bonus: set true

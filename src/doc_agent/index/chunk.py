@@ -44,12 +44,14 @@ def _flat_words(doc_chunks: list[Chunk]) -> tuple[list[str], list[str]]:
     return words, page_ids
 
 
-def _token_counts(words: list[str], tokenizer_name: str) -> list[int]:
+def _token_counts(words: list[str], tokenizer_name: str, revision: str | None) -> list[int]:
     """Per-word subword token count, via the SAME tokenizer embed.encode() will use, so chunk sizes
-    are measured in the unit that actually matters (embedding-model tokens, not raw words)."""
+    are measured in the unit that actually matters (embedding-model tokens, not raw words).
+    revision: pinned HF commit SHA (configs/config.yaml: embed.revision) -- avoids an unpinned
+    from_pretrained() download (bandit B615)."""
     from transformers import AutoTokenizer
 
-    tok = AutoTokenizer.from_pretrained(tokenizer_name)
+    tok = AutoTokenizer.from_pretrained(tokenizer_name, revision=revision)
     if not words:
         return []
     enc = tok(words, is_split_into_words=True, add_special_tokens=False)
@@ -106,6 +108,7 @@ def split(chunks: list[Chunk], cfg: dict) -> list[Chunk]:
     chunk_tokens = cfg["index"]["chunk_tokens"]
     overlap = cfg["index"]["overlap"]
     tokenizer_name = cfg["embed"]["model"]
+    tokenizer_revision = cfg["embed"].get("revision")
 
     by_doc: dict[str, list[Chunk]] = {}
     for c in chunks:
@@ -116,7 +119,7 @@ def split(chunks: list[Chunk], cfg: dict) -> list[Chunk]:
         words, page_ids = _flat_words(doc_chunks)
         if not words:
             continue
-        tok_counts = _token_counts(words, tokenizer_name)
+        tok_counts = _token_counts(words, tokenizer_name, tokenizer_revision)
         spans = _windows(len(words), tok_counts, chunk_tokens, overlap)
         for i, (start, end) in enumerate(spans):
             end = min(len(words), _extend_past_open_math(words, end))

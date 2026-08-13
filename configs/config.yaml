@@ -13,16 +13,26 @@ dev:       {max_pages: 4}
 enhance:   {enabled: false, model: "unet_small", type: "diffusion"}   # out of scope for us — A1 Section 6:
                                                                        # all 4 sources are clean, born-digital
                                                                        # PDFs rasterised at 300dpi, no repair needed.
-layout:    {model: "juliozhao/DocLayout-YOLO-DocStructBench", score_thr: 0.4}   # pretrained doc-layout
+layout:    {model: "juliozhao/DocLayout-YOLO-DocStructBench", score_thr: 0.4, revision: "8c3299a30b8ff29a1503c4431b035b93220f7b11"}
+                                                                       # pretrained doc-layout
                                                                        # model (pip extra "layout-yolo");
                                                                        # falls back to a PyMuPDF native
                                                                        # block/table/image heuristic when
                                                                        # that extra isn't installed (see
                                                                        # vision/layout.py + design_choices.md).
-ocr:       {model: "facebook/nougat-small", finetune: false}          # BASELINE = pretrained math-aware
+                                                                       # revision: pinned HF commit SHA (not a
+                                                                       # movable branch/tag) -- fixes bandit's
+                                                                       # B615 "unsafe HF download" finding
+                                                                       # (CI's security.yml gate) and protects
+                                                                       # against the upstream repo's weights
+                                                                       # changing under us between runs.
+ocr:       {model: "facebook/nougat-small", finetune: false, revision: "dced72ae7bcdfcb82a9ef55543a90a7a5e4d32e6"}
+                                                                       # BASELINE = pretrained math-aware
                                                                        # vision-language OCR (E25: math /
                                                                        # scientific notation data speciality)
-embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 1}
+                                                                       # revision: pinned HF commit SHA, see
+                                                                       # layout.revision's comment above.
+embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 1, revision: "e8c3b32edf5434bc2275fc9bab85f82640a19130"}
                                                                        # batch_size=1: kept small out of an
                                                                        # earlier (wrong) hypothesis that OCR+
                                                                        # embed batching caused this dev machine's

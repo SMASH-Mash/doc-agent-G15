@@ -53,6 +53,7 @@ def _load_yolo(cfg: dict) -> Any:
         weights = hf_hub_download(
             repo_id=cfg["layout"]["model"],
             filename="doclayout_yolo_docstructbench_imgsz1024.pt",
+            revision=cfg["layout"].get("revision"),
         )
         _yolo_model = YOLOv10(weights)
         logger.info(f"layout: loaded DocLayout-YOLO from {cfg['layout']['model']}")

@@ -37,8 +37,11 @@ class Reader:
         from transformers import NougatProcessor, VisionEncoderDecoderModel
 
         self._device = "cuda" if torch.cuda.is_available() else "cpu"
-        self._processor = NougatProcessor.from_pretrained(self.cfg["model"])
-        self._model = VisionEncoderDecoderModel.from_pretrained(self.cfg["model"])
+        revision = self.cfg.get("revision")
+        self._processor = NougatProcessor.from_pretrained(self.cfg["model"], revision=revision)
+        self._model = VisionEncoderDecoderModel.from_pretrained(
+            self.cfg["model"], revision=revision
+        )
         self._model.to(self._device)
         self._model.eval()
         logger.info(f"ocr: loaded {self.cfg['model']} on {self._device}")

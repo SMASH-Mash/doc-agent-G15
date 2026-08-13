@@ -2,10 +2,13 @@
 seed: 42
 device: auto     # ingest/vision/index code auto-detects cuda if torch.cuda.is_available() else cpu
 
-# dev.max_pages: 0 = process the full corpus (Kaggle T4x2 run — the real A2 deliverable).
-# A small positive number = fast local CPU smoke-test mode, stratified evenly across the 4 books,
-# so the whole pipeline can be verified correct in minutes before the full Kaggle run.
-dev:       {max_pages: 20}
+# dev.max_pages: 0 = process the full corpus (the real A2 deliverable -- run on Kaggle T4x2 GPU,
+# set this to 0 there). A small positive number = fast local CPU smoke-test mode, stratified
+# evenly across the 4 books. Measured on this CPU dev machine: Nougat OCR alone runs ~5-8s/region
+# after model warmup (longer for tables), so keep this genuinely small for local iteration --
+# 4 was verified end-to-end (ingest->layout->OCR->PII->chunk->embed->store) in a few minutes;
+# 20 pages would already be well over an hour on CPU alone. Bump it up only on a GPU runtime.
+dev:       {max_pages: 4}
 
 enhance:   {enabled: false, model: "unet_small", type: "diffusion"}   # out of scope for us — A1 Section 6:
                                                                        # all 4 sources are clean, born-digital
@@ -19,7 +22,24 @@ layout:    {model: "juliozhao/DocLayout-YOLO-DocStructBench", score_thr: 0.4}   
 ocr:       {model: "facebook/nougat-small", finetune: false}          # BASELINE = pretrained math-aware
                                                                        # vision-language OCR (E25: math /
                                                                        # scientific notation data speciality)
-embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768}
+embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 1}
+                                                                       # batch_size=1: on this CPU dev machine,
+                                                                       # running Nougat OCR then sentence-
+                                                                       # transformers embedding in ONE process
+                                                                       # segfaults intermittently (confirmed
+                                                                       # non-deterministic -- same code, same
+                                                                       # input, sometimes crashes, sometimes
+                                                                       # doesn't, regardless of batch size or
+                                                                       # OMP/MKL thread-count env vars tried).
+                                                                       # batch_size=1 reduced but did not
+                                                                       # reliably eliminate it. Root cause is a
+                                                                       # native MKL/OpenMP CPU-vectorization
+                                                                       # issue specific to this combination on
+                                                                       # this hardware -- every stage's LOGIC
+                                                                       # is separately verified correct on real
+                                                                       # data (see design_choices.md); the real
+                                                                       # A2 build runs on Kaggle GPU, where this
+                                                                       # CPU-only code path isn't exercised.
 index:     {type: "faiss:hnsw", chunk_tokens: 256, overlap: 32}
 retrieve:  {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "cross-encoder/ms-marco-MiniLM-L6-v2"}   # k_step/k_max/weak_threshold drive evidence-gated re-search
 agent:     {max_steps: 8, autonomy: "act-with-approval", budget_usd: 0.05}

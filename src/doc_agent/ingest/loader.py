@@ -44,9 +44,12 @@ def image_path_for(page_id: str) -> str:
 
 
 def _stratified_sample(pages: list[Page], max_pages: int) -> list[Page]:
-    """Even sample across all documents (every Nth page within each book, not just the first N
-    pages, which would be front matter/table of contents) so a small dev.max_pages smoke-test run
-    still exercises every book's content, not just the alphabetically-first one."""
+    """Even sample across all documents -- bucket-CENTER indices spread across each book, not the
+    first N pages (front matter/title pages, often near-blank -- see preprocess.py's own blank-page
+    drop) so a small dev.max_pages smoke-test run still exercises real content from every book.
+    Bucket-center (not bucket-start) matters specifically when per_doc==1 (max_pages <= n_docs,
+    e.g. our small local default): a bucket-start pick would always land on page 1 of every book;
+    bucket-center picks the middle of the book instead."""
     if max_pages <= 0 or len(pages) <= max_pages:
         return pages
     by_doc: dict[str, list[Page]] = {}
@@ -55,8 +58,9 @@ def _stratified_sample(pages: list[Page], max_pages: int) -> list[Page]:
     per_doc = max(1, max_pages // len(by_doc))
     sampled: list[Page] = []
     for doc_pages in by_doc.values():
-        step = max(1, len(doc_pages) // per_doc)
-        sampled.extend(doc_pages[::step][:per_doc])
+        n = len(doc_pages)
+        indices = sorted({min(n - 1, int((i + 0.5) * n / per_doc)) for i in range(per_doc)})
+        sampled.extend(doc_pages[i] for i in indices)
     sampled_ids = {p.id for p in sampled}
     return [p for p in pages if p.id in sampled_ids][:max_pages]
 

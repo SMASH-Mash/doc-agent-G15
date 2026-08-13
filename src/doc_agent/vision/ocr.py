@@ -363,7 +363,7 @@ def _error_rate(prediction: list[Any], reference: list[Any]) -> float:
 class Reader:
     """Granite Docling reader configured by ``cfg['ocr']``."""
 
-    def __init__(self, cfg: dict[str, Any]) -> None:
+    def __init__(self, cfg: dict) -> None:
         self.root_cfg = cfg
         self.cfg = cfg.get("ocr", {})
         self.model_name = str(self.cfg.get("model", "docling-project/granite-docling-2stage-258m"))
@@ -750,7 +750,7 @@ def _write_canonical(path: Path, rows: list[dict[str, Any]], reader: Reader) -> 
     temporary.replace(path)
 
 
-def transcribe(regions: list[Region], cfg: dict[str, Any]) -> list[Chunk]:
+def transcribe(regions: list[Region], cfg: dict) -> list[Chunk]:
     """Transcribe layout regions into deterministic, page-grounded text chunks."""
     if not regions:
         return []

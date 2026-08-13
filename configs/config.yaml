@@ -81,7 +81,14 @@ ocr:
     formula: "<formula>"
     table: "<otsl>"
     code: "<code>"
-chunk: {strategy: "structure_aware", chunk_tokens: 384, overlap: 48}
+chunk:
+  strategy: "structure_aware"
+  chunk_tokens: 384
+  overlap: 48
+  heading_context_tokens: 64
+  heading_labels: [heading, section_header, title]
+  atomic_labels: [formula, table, code]
+  manifest_path: data/interim/chunks/chunks.jsonl
 embed: {model: "BAAI/bge-m3", dim: 1024, normalize: true}
 index: {type: "faiss:flat_ip"}
 retrieve: {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "BAAI/bge-reranker-v2-m3"}

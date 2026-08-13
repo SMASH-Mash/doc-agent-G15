@@ -18,23 +18,54 @@ dependencies = [
   "pydantic>=2.7,<3.0",
   "pyyaml>=6.0,<7.0",
   "pydantic-settings>=2.2,<3.0",
+  "pymupdf>=1.24,<2.0",
+  "pillow>=10.0,<11.0",
+  "sentencepiece>=0.2,<0.3",
+  "gdown>=5.0,<6.0",
 ]
 
 [project.optional-dependencies]
-dev = ["ruff>=0.4", "black>=24.4", "mypy>=1.10", "pytest>=8.2", "pre-commit>=3.7"]
+dev = ["ruff>=0.4", "black>=24.4", "mypy>=1.10,<2.0", "pytest>=8.2", "pre-commit>=3.7"]
+# Pretrained layout model (vision/layout.py primary backend). Kept optional: its transitive dep
+# albumentations->albucore->stringzilla has no prebuilt wheel for Windows+cp311, requiring an MSVC
+# toolchain to build from source there. Linux (CI, Kaggle) installs it cleanly from prebuilt wheels.
+# layout.py auto-falls back to a PyMuPDF-based heuristic detector when this extra isn't installed.
+layout-yolo = ["doclayout-yolo>=0.0.3,<0.1"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 [tool.ruff.lint]
 select = ["E","F","I","N","B","UP"]
+# F405/F403: the stub's own convention is `from ..contracts import *  # noqa` in nearly every module —
+# inherent to that pattern, not a real issue (contracts.py's names are the fixed data contracts).
+# E501: a handful of course-authored docstrings/comments sit a few chars over line-length; not worth
+# reflowing unrelated stub prose. N812: `import lightning as L` is PyTorch Lightning's own documented
+# import convention (training/ stubs), not a naming mistake.
+ignore = ["F403", "F405", "E501", "N812"]
 [tool.black]
 line-length = 100
 [tool.mypy]
 python_version = "3.11"
 disallow_untyped_defs = true
 ignore_missing_imports = true
+# sqlite's file locking is unreliable over this repo's UNC/WSL-mounted path, which crashes mypy's
+# default sqlite-backed cache with "database is locked" (INTERNAL ERROR) on every run. The plain
+# filesystem cache works fine here, so pin it off rather than requiring every invocation to pass
+# --no-sqlite-cache by hand.
+sqlite_cache = false
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 addopts = "-q"
 testpaths = ["tests"]
+
+# CPU-only torch wheels: CI (ubuntu-latest, no GPU) and dev machines without a local NVIDIA GPU should not
+# download the ~2.5GB CUDA-bundled default wheel. Kaggle/Colab GPU runs use their own pre-installed
+# CUDA torch and do not go through this lockfile, so this has no effect there.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

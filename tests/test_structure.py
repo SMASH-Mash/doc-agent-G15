@@ -1,5 +1,7 @@
 """STRUCTURE LOCK — CI fails if required modules/callables/signatures drift."""
-import importlib, inspect
+
+import importlib
+import inspect
 
 REQUIRED = {
     "doc_agent.pipeline": ["build_knowledge_base", "answer"],
@@ -20,21 +22,37 @@ REQUIRED = {
     "doc_agent.mlops.tracking": ["init_run"],
 }
 
+
 def test_required_symbols_exist():
     for mod, names in REQUIRED.items():
         m = importlib.import_module(mod)
         for n in names:
             assert hasattr(m, n), f"missing {mod}.{n} — do not remove/rename"
 
+
 def test_agent_loop_signature():
     from doc_agent.agent.agent import Agent
+
     assert set(inspect.signature(Agent.run).parameters) == {"self", "query_text"}
+
 
 def test_tool_names_locked():
     from doc_agent.agent.tools import REGISTRY
+
     got = {t.name for t in REGISTRY}
-    assert got == {"retrieve","rerank","read_page","enhance_page","extract",
-                   "aggregate","cite","calculator","escalate_to_human"}
+    assert got == {
+        "retrieve",
+        "rerank",
+        "read_page",
+        "enhance_page",
+        "extract",
+        "aggregate",
+        "cite",
+        "calculator",
+        "escalate_to_human",
+    }
+
+
 REQUIRED_V2 = {
     "doc_agent.settings": ["settings"],
     "doc_agent.logging_conf": ["get_logger"],
@@ -49,8 +67,10 @@ REQUIRED_V2 = {
     "doc_agent.data.validate": ["validate"],
 }
 
+
 def test_required_v2_symbols_exist():
     import importlib
+
     for mod, names in REQUIRED_V2.items():
         m = importlib.import_module(mod)
         for n in names:
@@ -66,14 +86,27 @@ REQUIRED_XCUT = {
     "doc_agent.logging_conf": ["register"],
 }
 
+
 def test_crosscutting_wiring_exists():
     import importlib
+
     for mod, names in REQUIRED_XCUT.items():
         m = importlib.import_module(mod)
         for n in names:
             assert hasattr(m, n), f"missing {mod}.{n} - cross-cutting wiring"
 
+
 def test_seams_are_locked():
     from doc_agent import hooks
-    assert set(hooks.SEAMS) == {"after_ingest","after_ocr","before_index","after_retrieve",
-        "on_step","on_tool_call","before_answer","after_answer","on_log"}
+
+    assert set(hooks.SEAMS) == {
+        "after_ingest",
+        "after_ocr",
+        "before_index",
+        "after_retrieve",
+        "on_step",
+        "on_tool_call",
+        "before_answer",
+        "after_answer",
+        "on_log",
+    }

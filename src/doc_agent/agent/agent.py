@@ -1,29 +1,38 @@
 """Stage 6 - FIXED loop - perceive -> decide -> act -> observe, with cross-cutting seams.
 Implement decide() and synthesize() only. Security, grounding, PII, and tracing run via hooks at the
 marked seams - do NOT inline them here."""
+
 from __future__ import annotations
-from ..contracts import *  # noqa
+
+from typing import Any
+
 from .. import hooks
+from ..contracts import *  # noqa
 from .memory import Memory
+
 
 class Agent:
     """FIXED loop. Implement decide() (the policy) and synthesize() only."""
-    def __init__(self, cfg: dict, retriever) -> None:
-        self.cfg = cfg["agent"]; self.retriever = retriever; self.mem = Memory()
+
+    def __init__(self, cfg: dict, retriever: Any) -> None:
+        self.cfg = cfg["agent"]
+        self.retriever = retriever
+        self.mem = Memory()
 
     def run(self, query_text: str) -> Answer:
-        state = {"query": query_text, "obs": []}
+        state: dict[str, Any] = {"query": query_text, "obs": []}
         for _ in range(self.cfg["max_steps"]):
             hooks.run(hooks.ON_STEP, {"state": state})
-            action = self.decide(state)                      # IMPLEMENT (policy)
+            action = self.decide(state)  # IMPLEMENT (policy)
             if action["tool"] == "stop":
                 break
-            hooks.run(hooks.ON_TOOL_CALL, {"action": action})   # guardrails/injection/trace
-            result = self.act(action)                        # runs the tool via REGISTRY
-            state["obs"].append(result); self.mem.add(result)
-        hooks.run(hooks.BEFORE_ANSWER, {"state": state})     # grounding gate / PII redact
-        ans = self.synthesize(state)                         # IMPLEMENT (grounded answer)
-        hooks.run(hooks.AFTER_ANSWER, {"answer": ans})       # trace / metrics
+            hooks.run(hooks.ON_TOOL_CALL, {"action": action})  # guardrails/injection/trace
+            result = self.act(action)  # runs the tool via REGISTRY
+            state["obs"].append(result)
+            self.mem.add(result)
+        hooks.run(hooks.BEFORE_ANSWER, {"state": state})  # grounding gate / PII redact
+        ans = self.synthesize(state)  # IMPLEMENT (grounded answer)
+        hooks.run(hooks.AFTER_ANSWER, {"answer": ans})  # trace / metrics
         return ans
 
     def decide(self, state: dict) -> dict:

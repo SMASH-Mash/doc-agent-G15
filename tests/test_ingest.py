@@ -5,14 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import fitz
+import pymupdf
 from PIL import Image
 
 from doc_agent.ingest import loader, preprocess
 
 
 def _make_two_page_pdf(path: Path) -> None:
-    document = fitz.open()
+    document = pymupdf.open()
     for label in ("Page one: x^2", "Page two: integral"):
         page = document.new_page(width=240, height=320)
         page.insert_text((30, 50), label)

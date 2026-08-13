@@ -30,7 +30,15 @@ enhance: {enabled: false, model: "none", type: "none"}
 # A2 stages 2-4 are intentionally left as planned settings. They are implemented in later steps.
 layout:
   model: "docling-project/docling-layout-heron"
-  score_thr: 0.60
+  revision: "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"
+  device: cuda
+  score_threshold: 0.60
+  batch_size: 1
+  dedupe_iou: 0.85
+  ignored_labels: [page_header, page_footer]
+  manifest_path: data/interim/layout/regions.jsonl
+  save_debug: false
+  debug_dir: data/interim/layout/debug
 ocr: {model: "ibm-granite/granite-docling-258M", finetune: true}
 chunk: {strategy: "structure_aware", chunk_tokens: 384, overlap: 48}
 embed: {model: "BAAI/bge-m3", dim: 1024, normalize: true}

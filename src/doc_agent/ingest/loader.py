@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-import fitz
+import pymupdf
 from PIL import Image, ImageOps
 
 from ..contracts import Page
@@ -70,7 +70,7 @@ def _render_pdf(
     pages: list[Page] = []
     rows: list[dict[str, Any]] = []
 
-    with fitz.open(source_path) as document:
+    with pymupdf.open(source_path) as document:
         if document.page_count == 0:
             raise ValueError(f"PDF contains no pages: {source_path}")
 

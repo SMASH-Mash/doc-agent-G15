@@ -13,7 +13,13 @@ axes:
 corpus:
   path: data/raw/
   pages: 2521                        # 4 books; floor: >= 300 (met)
-  words: 744092                      # floor: >= 60000 (met)
+  words: 573318                      # floor: >= 60000 (met) -- real, code-verified count from
+                                      # data.validate() against the actual downloaded PDFs' text
+                                      # layer (logged on every real run). A1's earlier ~744k estimate
+                                      # is preserved as-is in configs/task.yaml's Section-1 recap
+                                      # (the A2 form says not to change that number), but this file
+                                      # is A2's current-state manifest, not a frozen recap -- see
+                                      # configs/design_choices.md's Stage 0 row.
   provenance: data/provenance.md
 
 heldout:

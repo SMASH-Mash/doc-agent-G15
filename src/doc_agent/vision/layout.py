@@ -66,9 +66,22 @@ def _load_yolo(cfg: dict) -> Any:
     return _yolo_model
 
 
+def _yolo_device() -> str:
+    """Mirrors ocr.Reader / index.embed's auto-detect -- was hardcoded to 'cpu' here, which meant
+    layout detection alone stayed off the GPU even once a CUDA-enabled torch build made every
+    other stage use it."""
+    import torch
+
+    return "cuda" if torch.cuda.is_available() else "cpu"
+
+
 def _detect_with_yolo(model: Any, page: Page, cfg: dict) -> list[Region]:
     result = model.predict(
-        page.image_path, imgsz=1024, conf=cfg["layout"]["score_thr"], device="cpu", verbose=False
+        page.image_path,
+        imgsz=1024,
+        conf=cfg["layout"]["score_thr"],
+        device=_yolo_device(),
+        verbose=False,
     )[0]
     names = result.names
     regions = []

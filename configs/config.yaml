@@ -32,17 +32,19 @@ ocr:       {model: "facebook/nougat-small", finetune: false, revision: "dced72ae
                                                                        # scientific notation data speciality)
                                                                        # revision: pinned HF commit SHA, see
                                                                        # layout.revision's comment above.
-embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 1, revision: "e8c3b32edf5434bc2275fc9bab85f82640a19130"}
-                                                                       # batch_size=1: kept small out of an
+embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 32, revision: "e8c3b32edf5434bc2275fc9bab85f82640a19130"}
+                                                                       # batch_size: was pinned to 1 out of an
                                                                        # earlier (wrong) hypothesis that OCR+
                                                                        # embed batching caused this dev machine's
                                                                        # crash. Root cause is now precisely
                                                                        # isolated -- see index.type below, it
                                                                        # was faiss IndexHNSWFlat, not batching or
-                                                                       # OCR/embed interaction. Left at 1 for now
-                                                                       # since it's harmless at our small local
-                                                                       # dev.max_pages scale; safe to raise once
-                                                                       # re-verified with the flat index.
+                                                                       # OCR/embed interaction -- re-verified with
+                                                                       # the flat index, so raised to 32: mpnet-base
+                                                                       # (~420MB) batched at 32x256-token chunks is
+                                                                       # a trivial fraction of an 8GB card's VRAM
+                                                                       # (and negligible on CPU too), so this is
+                                                                       # free throughput either way.
 index:     {type: "faiss:flat", chunk_tokens: 256, overlap: 32}
                                                                        # faiss:flat, not faiss:hnsw: live,
                                                                        # user-supervised debugging isolated a

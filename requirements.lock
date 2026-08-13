@@ -19,8 +19,6 @@ anyio==4.14.2
     #   gradio
     #   httpx
     #   starlette
-ast-serialize==0.8.0
-    # via mypy
 attrs==26.1.0
     # via aiohttp
 beautifulsoup4==4.15.0
@@ -40,22 +38,19 @@ charset-normalizer==3.5.0
 click==8.4.2
     # via
     #   black
+    #   nltk
     #   uvicorn
     #   wandb
 cloudpickle==3.1.2
     # via gymnasium
-colorama==0.4.6
-    # via
-    #   click
-    #   pytest
-    #   tqdm
-    #   typer
 contourpy==1.3.3
     # via matplotlib
 cycler==0.12.1
     # via matplotlib
 datasets==2.21.0
     # via doc-agent (pyproject.toml)
+defusedxml==0.7.1
+    # via nltk
 dill==0.3.8
     # via
     #   datasets
@@ -113,6 +108,8 @@ h11==0.16.0
     # via
     #   httpcore
     #   uvicorn
+hf-xet==1.6.0
+    # via huggingface-hub
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
@@ -140,16 +137,18 @@ importlib-resources==6.5.2
     # via gradio
 iniconfig==2.3.0
     # via pytest
-intel-openmp==2021.4.0
-    # via mkl
 jinja2==3.1.6
     # via
     #   gradio
     #   torch
 joblib==1.5.3
-    # via scikit-learn
+    # via
+    #   nltk
+    #   scikit-learn
 kiwisolver==1.5.0
     # via matplotlib
+levenshtein==0.27.4
+    # via python-levenshtein
 librt==0.15.0
     # via mypy
 lightning==2.3.3
@@ -169,8 +168,6 @@ matplotlib==3.11.1
     # via gradio
 mdurl==0.1.2
     # via markdown-it-py
-mkl==2021.4.0
-    # via torch
 mpmath==1.3.0
     # via sympy
 multidict==6.7.1
@@ -179,7 +176,7 @@ multidict==6.7.1
     #   yarl
 multiprocess==0.70.16
     # via datasets
-mypy==2.3.0
+mypy==1.20.2
     # via doc-agent (pyproject.toml)
 mypy-extensions==1.1.0
     # via
@@ -189,6 +186,8 @@ narwhals==2.24.0
     # via scikit-learn
 networkx==3.6.1
     # via torch
+nltk==3.10.3
+    # via doc-agent (pyproject.toml)
 nodeenv==1.10.0
     # via pre-commit
 numpy==2.4.6
@@ -207,6 +206,37 @@ numpy==2.4.6
     #   torchmetrics
     #   torchvision
     #   transformers
+nvidia-cublas-cu12==12.1.3.1
+    # via
+    #   nvidia-cudnn-cu12
+    #   nvidia-cusolver-cu12
+    #   torch
+nvidia-cuda-cupti-cu12==12.1.105
+    # via torch
+nvidia-cuda-nvrtc-cu12==12.1.105
+    # via torch
+nvidia-cuda-runtime-cu12==12.1.105
+    # via torch
+nvidia-cudnn-cu12==8.9.2.26
+    # via torch
+nvidia-cufft-cu12==11.0.2.54
+    # via torch
+nvidia-curand-cu12==10.3.2.106
+    # via torch
+nvidia-cusolver-cu12==11.4.5.107
+    # via torch
+nvidia-cusparse-cu12==12.1.0.106
+    # via
+    #   nvidia-cusolver-cu12
+    #   torch
+nvidia-nccl-cu12==2.20.5
+    # via torch
+nvidia-nvjitlink-cu12==12.9.86
+    # via
+    #   nvidia-cusolver-cu12
+    #   nvidia-cusparse-cu12
+nvidia-nvtx-cu12==12.1.105
+    # via torch
 orjson==3.11.9
     # via gradio
 packaging==24.2
@@ -289,6 +319,8 @@ python-discovery==1.5.2
     # via virtualenv
 python-dotenv==1.2.2
     # via pydantic-settings
+python-levenshtein==0.27.4
+    # via doc-agent (pyproject.toml)
 python-multipart==0.0.32
     # via gradio
 pytokens==0.4.1
@@ -309,8 +341,12 @@ pyyaml==6.0.3
     #   timm
     #   transformers
     #   wandb
+rapidfuzz==3.14.5
+    # via levenshtein
 regex==2026.7.19
-    # via transformers
+    # via
+    #   nltk
+    #   transformers
 requests==2.34.2
     # via
     #   datasets
@@ -360,8 +396,6 @@ starlette==0.46.2
     # via fastapi
 sympy==1.14.0
     # via torch
-tbb==2021.13.1
-    # via mkl
 threadpoolctl==3.6.0
     # via scikit-learn
 timm==1.0.28
@@ -370,7 +404,7 @@ tokenizers==0.19.1
     # via transformers
 tomlkit==0.12.0
     # via gradio
-torch==2.3.1+cpu
+torch==2.3.1+cu121
     # via
     #   doc-agent (pyproject.toml)
     #   lightning
@@ -384,14 +418,17 @@ torchmetrics==1.4.3
     #   doc-agent (pyproject.toml)
     #   lightning
     #   pytorch-lightning
-torchvision==0.18.1
-    # via timm
+torchvision==0.18.1+cu121
+    # via
+    #   doc-agent (pyproject.toml)
+    #   timm
 tqdm==4.70.0
     # via
     #   datasets
     #   gdown
     #   huggingface-hub
     #   lightning
+    #   nltk
     #   pytorch-lightning
     #   sentence-transformers
     #   transformers

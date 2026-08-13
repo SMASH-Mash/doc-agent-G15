@@ -2,13 +2,41 @@
 seed: 42
 device: cuda
 
-enhance:   {enabled: true,  model: "unet_small", type: "diffusion"}   # or "vae" / "none"
-layout:    {model: "detectron2:layout", score_thr: 0.5}
-ocr:       {model: "microsoft/trocr-base-printed", finetune: true}    # BASELINE = pretrained OCR
-embed:     {model: "sentence-transformers/all-MiniLM-L6-v2", dim: 384}
-index:     {type: "faiss:hnsw", chunk_tokens: 256, overlap: 32}
-retrieve:  {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "cross-encoder/ms-marco-MiniLM-L6-v2"}   # k_step/k_max/weak_threshold drive evidence-gated re-search
-agent:     {max_steps: 8, autonomy: "act-with-approval", budget_usd: 0.05}
-rl:        {algo: "ppo", train_policy: false}                         # bonus: set true
-serve:     {batch: true}
-deploy:    {target: "hf-spaces"}
+# Stage 1 — deterministic corpus ingestion. These defaults match the clean, born-digital
+# ATLAS textbook scans described in A1: rasterise at 300 dpi and preserve RGB strokes.
+ingest:
+  raw_dir: data/raw
+  pages_dir: data/interim/pages
+  manifest_path: data/interim/pages.jsonl
+  dpi: 300
+  overwrite: false
+
+preprocess:
+  enabled: true
+  output_dir: data/interim/preprocessed
+  overwrite: false
+  deskew: false
+  denoise: false
+  denoise_strength: 7
+  autocontrast: false
+  grayscale: false
+  binarize: false
+  adaptive_block_size: 35
+  adaptive_c: 11
+
+# Enhancement is bonus/gated and is not justified for the clean born-digital corpus.
+enhance: {enabled: false, model: "none", type: "none"}
+
+# A2 stages 2-4 are intentionally left as planned settings. They are implemented in later steps.
+layout:
+  model: "docling-project/docling-layout-heron"
+  score_thr: 0.60
+ocr: {model: "ibm-granite/granite-docling-258M", finetune: true}
+chunk: {strategy: "structure_aware", chunk_tokens: 384, overlap: 48}
+embed: {model: "BAAI/bge-m3", dim: 1024, normalize: true}
+index: {type: "faiss:flat_ip"}
+retrieve: {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "BAAI/bge-reranker-v2-m3"}
+agent: {max_steps: 8, autonomy: "act-with-approval", budget_usd: 0.05}
+rl: {algo: "ppo", train_policy: false}
+serve: {batch: true}
+deploy: {target: "hf-spaces"}

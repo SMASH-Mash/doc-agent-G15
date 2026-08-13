@@ -18,23 +18,30 @@ INDEX_DIR = Path("data/interim/index")  # under data/interim/, already gitignore
 
 
 def build(chunks: list[Chunk], vectors: Any, cfg: dict) -> None:
-    """Persist a vector index (cfg['index']['type']). Only 'faiss:hnsw' is implemented, matching
-    the config default -- HNSW genuinely reproduces Malkov & Yashunin's published ANN algorithm
-    (A2 form Section 3 credit). Also writes a meta.jsonl chunk sidecar (FAISS stores vectors only)
-    and an index_stats.json summary that later stages/notebooks read back rather than
-    hand-transcribing numbers."""
+    """Persist a vector index (cfg['index']['type']). Only 'faiss:flat' is implemented.
+
+    We originally used faiss.IndexHNSWFlat (the graph-based ANN index that reproduces Malkov &
+    Yashunin's published algorithm). Live testing on this dev machine isolated a reproducible
+    native crash (Windows STATUS_ACCESS_VIOLATION) inside faiss-cpu 1.8.0's IndexHNSWFlat.add()
+    itself -- confirmed with a bare numpy+faiss repro that has zero ML models involved, so it was
+    never an OCR/embedding interaction as first suspected. faiss.IndexFlatIP does not crash on
+    identical data, so that's what we build here: exact (not approximate) inner-product search
+    over L2-normalized vectors, i.e. exact cosine similarity. At our scale (thousands, not
+    millions, of chunks) exact search is fast enough that losing HNSW's approximate-NN speedup
+    costs us nothing observable, and it's provably correct (no recall/accuracy trade-off at all).
+    Also writes a meta.jsonl chunk sidecar (FAISS stores vectors only) and an index_stats.json
+    summary that later stages/notebooks read back rather than hand-transcribing numbers."""
     import faiss
 
     index_type = cfg["index"]["type"]
-    if index_type != "faiss:hnsw":
-        raise NotImplementedError(f"index type {index_type!r} not implemented (only faiss:hnsw)")
+    if index_type != "faiss:flat":
+        raise NotImplementedError(f"index type {index_type!r} not implemented (only faiss:flat)")
 
     vecs = np.asarray(vectors, dtype="float32")
     dim = vecs.shape[1] if vecs.size else cfg["embed"]["dim"]
 
     INDEX_DIR.mkdir(parents=True, exist_ok=True)
-    index = faiss.IndexHNSWFlat(dim, 32, faiss.METRIC_INNER_PRODUCT)
-    index.hnsw.efConstruction = 100
+    index = faiss.IndexFlatIP(dim)
     if vecs.size:
         index.add(vecs)
     faiss.write_index(index, str(INDEX_DIR / "faiss.index"))

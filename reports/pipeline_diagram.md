@@ -31,7 +31,7 @@ flowchart TD
         L --> M["governance/pii.py<br/>AFTER_OCR: redact emails/IDs/phones"]
         M --> N["index/chunk.py split()<br/>token-window re-chunk (256/32)<br/>never splits inside $$...$$"]
         N --> O["index/embed.py encode()<br/>all-mpnet-base-v2, 768-dim, normalized"]
-        O --> P["index/store.py build()<br/>FAISS IndexHNSWFlat (cosine)"]
+        O --> P["index/store.py build()<br/>FAISS IndexFlatIP (exact cosine)"]
     end
 
     P --> Q["data/interim/index/<br/>faiss.index + meta.jsonl + index_stats.json"]

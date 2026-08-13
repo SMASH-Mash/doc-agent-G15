@@ -27,7 +27,7 @@ def _get_model(model_name: str) -> Any:
 
 def encode(chunks: list[Chunk], cfg: dict) -> np.ndarray:
     """Embed with cfg['embed']['model']. L2-normalized so index/store.py's cosine-via-inner-product
-    HNSW index is correct. IMPLEMENT."""
+    flat index is correct. IMPLEMENT."""
     model = _get_model(cfg["embed"]["model"])
     if not chunks:
         return np.zeros((0, cfg["embed"]["dim"]), dtype="float32")

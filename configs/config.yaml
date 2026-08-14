@@ -3,12 +3,18 @@ seed: 42
 device: auto     # ingest/vision/index code auto-detects cuda if torch.cuda.is_available() else cpu
 
 # dev.max_pages: 0 = process the full corpus (the real A2 deliverable -- run on Kaggle T4x2 GPU,
-# set this to 0 there). A small positive number = fast local CPU smoke-test mode, stratified
-# evenly across the 4 books. Measured on this CPU dev machine: Nougat OCR alone runs ~5-8s/region
-# after model warmup (longer for tables), so keep this genuinely small for local iteration --
-# 4 was verified end-to-end (ingest->layout->OCR->PII->chunk->embed->store) in a few minutes;
-# 20 pages would already be well over an hour on CPU alone. Bump it up only on a GPU runtime.
-dev:       {max_pages: 4}
+# set this to 0 there). A small positive number = fast local smoke-test mode, stratified evenly
+# across the 4 books. 300 = the project spec's own minimum-corpus floor (handbook/
+# 03-Project-Specification.md Part A: ">= 300 pages AND >= 60,000 words", mirrored verbatim as
+# MIN_PAGES/MIN_WORDS in data/validate.py) -- raised from the earlier 4-page pure-smoke-test value
+# so A2's submitted OCR-quality/index/retrieval evidence is measured over a sample at the same
+# scale the spec itself calls the minimum usable corpus, not just a few pages picked for a
+# multi-minute CPU correctness check. Only 3 held-out pages (grading_kit/heldout_pages/) are
+# excluded by hand-picking their page numbers outside this sampler's bucket-centered picks --
+# verify no overlap after changing this value. This dev machine has an NVIDIA GPU (torch is
+# installed from the cu121 index per [tool.uv.sources] in pyproject.toml), so 300 pages runs on
+# CUDA, not CPU -- the earlier "~5-8s/region on CPU" timing note no longer applies here.
+dev:       {max_pages: 300}
 
 enhance:   {enabled: false, model: "unet_small", type: "diffusion"}   # out of scope for us — A1 Section 6:
                                                                        # all 4 sources are clean, born-digital

@@ -87,10 +87,14 @@ def transcribe(regions: list[Region], cfg: dict) -> list[Chunk]:
     chunks: list[Chunk] = []
     skipped_figures = 0
     empty = 0
+    total = len(regions)
     for i, region in enumerate(regions):
         if region.kind == "figure":
             skipped_figures += 1
             continue
+        if i % 10 == 0 or i == total - 1:
+            # heartbeat only -- lets a long background run be tailed for progress; no behavior change.
+            logger.info(f"ocr.transcribe: region {i + 1}/{total} ({region.page_id})")
         text = reader.transcribe_region(region)
         if not text:
             empty += 1

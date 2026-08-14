@@ -31,7 +31,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["ruff>=0.4", "black>=24.4", "mypy>=1.10,<2.0", "pytest>=8.2", "pre-commit>=3.7"]
+dev = [
+  "ruff>=0.4", "black>=24.4", "mypy>=1.10,<2.0", "pytest>=8.2", "pre-commit>=3.7",
+  "ipykernel>=6.29", "nbconvert>=7.16",  # run/execute notebooks/*.ipynb (kb_demo.ipynb etc.)
+                                          # headlessly or from an IDE's Notebook UI -- `uv sync
+                                          # --extra dev` alone previously left no Jupyter kernel
+                                          # available in .venv at all.
+]
 # Pretrained layout model (vision/layout.py primary backend). Kept optional: its transitive dep
 # albumentations->albucore->stringzilla has no prebuilt wheel for Windows+cp311, requiring an MSVC
 # toolchain to build from source there. Linux (CI, Kaggle) installs it cleanly from prebuilt wheels.

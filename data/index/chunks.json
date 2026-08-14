@@ -1,0 +1,665 @@
+[
+  {
+    "chunk_id": "general_1_16_40_c00000_675bec59b395",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0001"
+    ],
+    "text": "1.1 Revision\nThe number system The number system\n\nThe diagram below shows the structure of the number system:\n\nTransparent Real Numbers (R) : natural numbers are {1; 2; 3; …}\n\nWe use the following definitions: We use the following definitions:\n\nEMBF2\n\nEMBF3\n\n· $_{N}$: natural numbers are\n<_ObjectiveC_><_Ruby_>: natural numbers are {1; 2; 3; ...}\n\n· N : natural numbers are {1; 2; 3; …}\n\n<_Perl_><_Perl_>\\bullet \\mathbb { Z } \\colon \\text {integers are } \\{ \\dots ; \\ - 3 ; \\ - 2 ; \\ - 1 ; \\ 0 ; \\ 1 ; \\ 2 ; \\ 3 ; \\ \\dots \\}\n\n·$_{ }$$_{Q}$ : rational numbers are numbers which can be written as a b where a and b are integers and b ̸ = 0 , or as a terminating or recurring decimal number. Examples: - 7 $_{2}$; - 2 , 25 ; 0 ; √ 9 ; 0 , ˙ 8 ; 23 1\n·$_{ }$$_{Examples}$: - 7 $_{2}$; - 2 , 25 ; 0 ; √ 9 ; 0 , ˙ 8 ; 23 1\n\n·$_{ }$$_{Q}$ ' : irrational numbers are numbers that cannot be written as a fraction with the numerator and denominator as integers. Irrational numbers also include decimal numbers that neither terminate nor recur.\n\n· ℝ : real numbers include all rational and irrational numbers.\n\n· R $^{'}$:\nun-real numbers or imaginary numbers"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00001_657328ac7839",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0001"
+    ],
+    "text": "1.1 Revision\nThe number system The number system\n\na fraction with the numerator and denominator as integers. Irrational numbers also include decimal numbers that neither terminate nor recur.\n\n· ℝ : real numbers include all rational and irrational numbers.\n\n· R $^{'}$:\nun-real numbers or imaginary numbers\n\n\\[\\begin{array} { r } { E x a m p l e s \\colon \\sqrt { - 2 5 } ; \\sqrt { [ } 4 ] { - 1 } ; - \\sqrt { - \\frac { 1 } { 1 6 } } } \\end{array}\\]\n\n➞ See video: 2223 at www.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00002_b107cd42477a",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0002"
+    ],
+    "text": "Exercise 1 - 1: The number system\n- 1: The number system\n\nUse the list of words below to describe each of the following numbers (in some cases multiple words will be applicable):\n\n\\[\\bullet \\text { Natural } ( \\mathbb { N } )\\]\n\n\\[\\bullet \\text { Whole } ( \\mathbb { N } _ { 0 } )\\]\n\n\\[\\bullet \\ \\text Integer ( \\mathbb { Z } )\\]\n\n\\[\\bullet \\text { Rational } ( \\mathbb { Q } )\\]\n\n\\[1 . \\, \\sqrt { 7 }\\]\n\n\\[2 . \\, 0 , 0 1\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n\\[6 . \\ 2 \\pi\\]\n\n\\[7 . \\ - 5 , 3 \\dot { 8 }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n\\[\\bullet \\ I r r a t i o n a l \\ ( \\mathbb { Q } ^ { \\prime } )\\]\n\n\\[\\bullet \\, \\text { Real } ( \\mathbb { R } )\\]\n\n\\[\\bullet \\text { Non-real } ( \\mathbb { R } ^ { \\prime } )\\]\n\n\\[9 . \\, - \\sqrt { - 3 }\\]\n\n\\[1 0 . \\ ( \\pi ) ^ { 2 }\\]\n\n11. -9 11\n\n\\[1 2 . \\sqrt { [ } 3 ] { - 8 }\\]\n\n13. 22 7\n\n14. 2,45897 . . .\n\n15. 0,65\n\n16. √ -32\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00003_d7bcb5e2a7f4",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0002"
+    ],
+    "text": "Exercise 1 - 1: The number system\n- 1: The number system\n\n[ } 3 ] { - 8 }\\]\n\n13. 22 7\n\n14. 2,45897 . . .\n\n15. 0,65\n\n16. √ -32\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n<_Matlab_>1. 22224 2. 2225 3. 2226 4. 2227 5. 2228 6. 2229\n7. 222B 8. 222C 9. 222D 10. 222F 11. 222G 12. 222H\n13. 222J 14. 222K 15. 222M\n\n\\[1 0 . \\ 2 2 2 F\\]\n\n\\[1 6 . \\ 2 2 2 N\\]\n\nWe use exponential notation to show that a number or variable is multiplied by itself a certain number of times. The exponent, also called the index or power, indicates the number of times the multiplication is repeated.\n\nm.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00004_c36be1c3fad0",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0002",
+      "general_1_16_40_p0003"
+    ],
+    "text": "We use exponential notation to show that a number or variable is multiplied by itself a certain number of times. The exponent, also called the index or power, indicates the number of times the multiplication is repeated.\n\nEMBF4\n\nWe use exponential notation to show that a number or variable is multiplied by itself a certain number of times. The exponent, also called the index or power, indicates the number of times the multiplication is repeated.\n\n\\[b a s e \\longleftrightarrow a ^ { n } \\longrightarrow e x p o n e n t / i n d e x\\]\n\n\\begin{array} { r } { a ^ { n } = a \\times a \\times a \\times \\hdots \\times a \\quad ( n \\, \\text {times} ) \\quad ( a \\in \\mathbb { R } , n \\in \\mathbb { N } ) } \\end{array}\n\n222P at www.everythingmaths.co.za 222P at www.everythingmaths.co.za\n\nExamples:\n\nExamples:\n\n\\[1 . \\ 2 \\times 2 \\times 2 \\times 2 = 2 ^ { 4 }\\]\n\n\\[2 . \\, 0 , 7 1 \\times 0 , 7 1 \\times 0 , 7 1 = ( 0 , 7 1 ) ^ { 3 }\\]\n\n\\[3 . \\ ( 5 0 1 ) ^ { 2 } = 5 0 1 \\times 5 0 1\\]\n\nWe also have the following definitions for exponents. It is important to remember that we always write the final answer with a positive exponent.\n\nFor x $^{2}$, we say x is squared and for y $^{3}$, we say that y is cubed. In the last example we have k $^{6}$; we say that k is raised to the sixth power."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00005_d06d8566916f",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0002",
+      "general_1_16_40_p0003"
+    ],
+    "text": "We use exponential notation to show that a number or variable is multiplied by itself a certain number of times. The exponent, also called the index or power, indicates the number of times the multiplication is repeated.\n\n, we say x is squared and for y $^{3}$, we say that y is cubed. In the last example we have k $^{6}$; we say that k is raised to the sixth power.\n\nWe also have the following definitions for exponents. It is important to remember that we always write the final answer with a positive exponent.\n\n\\[\\bullet \\ a ^ { 0 } = 1 \\quad ( a \\neq 0 \\ b e c a u s e \\ 0 ^ { 0 } \\ i s \\ u n d f i n e d )\\]\n\nWe also have the following definitions for exponents. It is important to remember that we always write the final answer with a positive exponent.\n\nExamples:\n\nExamples:\n\n\\[1 . 5 ^ { - 2 } = { \\frac { 1 } { 5 ^ { 2 } } } = { \\frac { 1 } { 2 5 } }\\]\n\n\\[2 . ( - 3 6 ) ^ { 0 } x = ( 1 ) x = x\\]\n\n\\[3 . \\, \\frac { 7 p ^ { - 1 } } { q ^ { 3 } t ^ { - 2 } } = \\frac { 7 t ^ { 2 } } { p q ^ { 3 } }\\]\n\nWe use the following laws for working with exponents: Exponents are defined as follows:\n\nWe use the following laws for working with exponents: Exponents are defined as follows:\n\n\\[\\bullet \\ a ^ { m } \\times a ^ { n } = a ^ { m + n }\\]\n\nWe use the following laws for working with exponents:"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00006_666af8e6d846",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0002",
+      "general_1_16_40_p0003"
+    ],
+    "text": "We use exponential notation to show that a number or variable is multiplied by itself a certain number of times. The exponent, also called the index or power, indicates the number of times the multiplication is repeated.\n\nexponent.\n\nExamples:\n\nExamples:\n\nWe use the following laws for working with exponents: Exponents are defined as follows:\n\nWe use the following laws for working with exponents: Exponents are defined as follows:\n\nWe use the following laws for working with exponents:\n\n\\[\\bullet \\ ( a b ) ^ { n } = a ^ { n } b ^ { n }\\]\n\n\\[\\begin{array} { r } { \\bullet \\, \\left ( \\frac { a } { b } \\right ) ^ { n } = \\frac { a ^ {\\]\n\nWorked example 1: Laws of exponents\n\n\\[{ w r e } \\ a > 0 , \\, b > 0 { \\text { and } } m , n \\in \\mathbb { Z } .\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00007_7314edcea091",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0003",
+      "general_1_16_40_p0004"
+    ],
+    "text": "Worked example 1: Laws of exponents\nWorked example 1: Laws of exponents\n\nSimplify the following: Simplify the following:\nSimplify the following:\n\nSimplify the following: Simplify the following:\nSimplify the following:\n\n\\[\\begin{array} { l l } { 1 . } & { 5 ( m ^ { 2 t } ) ^ { p } \\times 2 ( m ^ { 3 p } ) ^ { t } } \\\\ { 2 . } & { \\frac { 8 k ^ { 3 } x ^ { 2 } } { ( x k ) ^ { 2 } } } \\end{array}\\]\n\n\\[3 . \\, \\frac { 2 ^ { 2 } \\times 3 \\times 7 ^ { 4 } } { ( 7 \\times 2 ) ^ { 4 } }\\]\n\n\\[4 . \\, 3 ( 3 ^ { b } ) ^ { a }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00008_5c040f0262a8",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0004"
+    ],
+    "text": "SOLUTION\n\n\\[1 . \\, 5 ( m ^ { 2 t } ) ^ { p } \\times 2 ( m ^ { 3 p } ) ^ { t } = 1 0 m ^ { 2 p t + 3 p t } = 1 0 m ^ { 5 p t }\\]\n\n\\[2 . { \\frac { 8 k ^ { 3 } x ^ { 2 } } { ( x k ) ^ { 2 } } } = { \\frac { 8 k ^ { 3 } x ^ { 2 } } { x ^ { 2 } k ^ { 2 } } } = 8 k ^ { ( 3 - 2 ) } x ^ { ( 2 - 2 ) } = 8 k ^ { 1 } x ^ { 0 } = 8 k\\]\n\n\\[3 . \\, \\frac { 2 ^ { 2 } \\times 3 \\times 7 ^ { 4 } } { ( 7 \\times 2 ) ^ { 4 } } = \\frac { 2 ^ { 2 } \\times 3 \\times 7 ^ { 4 } } { 7 ^ { 4 } \\times 2 ^ { 4 } } = 2 ^ { ( 2 - 4 ) } \\times 3 \\times 7 ^ { ( 4 - 4 ) } = 2 ^ { - 2 } \\times 3 = \\frac { 3 } { 4 }\\]\n\n\\[4 . \\, 3 ( 3 ^ { b } ) ^ { a } = 3 \\times 3 ^ { a b } = 3 ^ { a b + 1 }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00009_d2a56cf4b48d",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0004"
+    ],
+    "text": "Worked example 2: Laws of exponents\nQUESTION\n\n\\[S i m p l i f y \\colon { \\frac { 3 ^ { m } - 3 ^ { m + 1 } } { 4 \\times 3 ^ { m } - 3 ^ { m } } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00010_1d3d96ad831f",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0004"
+    ],
+    "text": "SOLUTION\nStep 1: Simplify to a form that can be factorised\n\n\\[{ \\frac { 3 ^ { m } - 3 ^ { m + 1 } } { 4 \\times 3 ^ { m } - 3 ^ { m } } } = { \\frac { 3 ^ { m } - ( 3 ^ { m } \\times 3 ) } { 4 \\times 3 ^ { m } - 3 ^ { m } } }\\]\n\nStep 2:\nTake out a common factor\n\nStep 2:\nTake out a common factor\n\n\\[= { \\frac { 3 ^ { m } ( 1 - 3 ) } { 3 ^ { m } ( 4 - 1 ) } }\\]\n\nStep 3: Cancel the common factor and simplify\n\nStep 3: Cancel the common factor and simplify\n\n\\[\\begin{array} { r l } & { = \\frac { 1 - 3 } { 4 - 1 } } \\\\ & { = - \\frac { 2 } { 3 } } \\end{array}\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00011_4e3321040e74",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0005"
+    ],
+    "text": "Exercise 1 - 2: Laws of exponents\nLaws of exponents\n\nSimplify the following: Simplify the following:\n\nSimplify the following: Simplify the following:\n\n\\[1 . \\ 4 \\times 4 ^ { 2 a } \\times 4 ^ { 2 } \\times 4 ^ { a }\\]\n\n\\[2 . { \\frac { 3 ^ { 2 } } { 2 ^ { - 3 } } }\\]\n\n\\[3 . ( 3 p ^ { 5 } ) ^ { 2 }\\]\n\n\\[4 . \\, \\frac { k ^ { 2 } k ^ { 3 x - 4 } } { k ^ { x } }\\]\n\n\\[5 . \\, ( 5 ^ { z - 1 } ) ^ { 2 } + 5 ^ { z }\\]\n\n6 . \\, ( \\frac { 1 } { 4 } ) ^ {\n\n\\[7 . \\ ( x ^ { 2 } ) ^ { 5 }\\]\n\n\\[8 . \\left ( { \\frac { a } { b } } \\right ) ^ { - 2 }\\]\n\n\\[9 . ( m + n ) ^ { - 1 }\\]\n\n\\[1 0 . \\, 2 ( p ^ { t } ) ^ { s }\\]\n\n\\[1 1 . \\frac { 1 } { \\left ( \\frac { 1 } { a } \\right ) ^ { - 1 } }\\]\n\n\\[1 2 . \\, \\frac { k ^ { 0 } } { k ^ { - 1 } }\\]\n\n\\[1 3 . { \\frac { - 2 } { - 2 ^ { - a } } }\\]\n\n\\[1 4 . \\, \\frac { - h } { ( - h ) ^ { - 3 } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00012_b7c3d87ac9f9",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0005"
+    ],
+    "text": "Exercise 1 - 2: Laws of exponents\nLaws of exponents\n\nSimplify the following: Simplify the following:\n\nSimplify the following: Simplify the following:\n\n6 . \\, ( \\frac { 1 } { 4 } ) ^ {\n\n\\[1 5 . \\, \\left ( \\frac { a ^ { 2 } b ^ { 3 } } { c ^ { 3 } d } \\right ) ^ { 2 }\\]\n\n\\[1 6 . \\, 1 0 ^ { 7 } ( 7 ^ { 0 } ) \\times 1 0 ^ { - 6 } ( - 6 ) ^ { 0 } - 6\\]\n\n\\[\\begin{array} { r } { 1 7 . \\, m ^ { 3 } n ^ { 2 } \\div n m ^ { 2 } \\times \\frac { m n } { 2 } } \\end{array}\\]\n\n\\[1 8 . \\, ( 2 ^ { - 2 } - 5 ^ { - 1 } ) ^ { - 2 }\\]\n\n\\[\\begin{array} { r } { 1 9 . \\, ( y ^ { 2 } ) ^ { - 3 } \\div \\left ( \\frac { x ^ { 2 } } { y ^ { 3 } } \\right ) ^ { - 1 } } \\end{array}\\]\n\n\\[2 0 . \\, \\frac { 2 ^ { c - 5 } } { 2 ^ { c - 8 } }\\]\n\n\\[2 1 . \\, \\frac { 2 ^ { 9 a } \\times 4 ^ { 6 a } \\times 2 ^ { 2 } } { 8 ^ { 5 a } }\\]\n\n\\[2 2 . { \\frac { 2 0 t ^ { 5 } p ^ { 1 0 } } { 1 0 t ^ { 4 } p ^ { 9 } } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00013_6b7776a94e30",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0005"
+    ],
+    "text": "Exercise 1 - 2: Laws of exponents\nLaws of exponents\n\n\\[2 3 . \\, \\left ( \\frac { 9 q ^ { - 2 s } } { q ^ { - 3 s } y ^ { - 4 a - 1 } } \\right ) ^ { 2 }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n\\[1 2 . \\ 2 2 3 5\\]\n\n\\[2 1 . 2 2 3 G\\]\n\n\\[2 2 . \\ 2 2 3 H\\]\n\nm.everythingmaths.co.za\n\nm.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00014_2913cffb6aaa",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0005",
+      "general_1_16_40_p0006"
+    ],
+    "text": "1.2 Rational exponents and surds 1.2 Rational exponents and surds\n\nEMBF5\n\nEMBF5\n\nThe laws of exponents can also be extended to include the rational numbers. A rational number is any number that can be written as a fraction with an integer in the numerator and in the denominator. We also have the following definitions for working with rational exponents.\n\nFor √$_{25}$ = 5, we say that 5 is the square root of 25 and for 3 √$_{}$ = 2, we say tha 2 is the cube root of 8. For 3 ∵\n\nFor √$_{25}$ = 5, we say that 5 is the square root of 25 and for 3\n\n\\[\\begin{array} { r } { \\bullet \\, a ^ { - \\frac { 1 } { n } } = ( a ^ { - 1 } ) ^ { \\frac { 1 } { n } } = \\sqrt { [ } n ] { \\frac {\\]\n\nFor √$_{25}$ = 5, we say that 5 is the square root of 25 and for 3 √$_{}$ = 2, we say tha s th\n\n{ w h e r e } a > 0 , r > 0 { a n d } m , n \\in \\mathbb { Z } , n \\neq 0 .\n\nFor √$_{25}$ = 5, we say that 5 is the square root of 25 and for $_{3}$√$_{8}$ = 2, we say tha 2 is the cube root of 8. For √$_{{}$ $^{32}$= 2, w esay that 2 is th efifth ro ot of 32."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00015_0d8fb8bd0c76",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0005",
+      "general_1_16_40_p0006"
+    ],
+    "text": "1.2 Rational exponents and surds 1.2 Rational exponents and surds\n\n_{8}$ = 2, we say tha 2 is the cube root of 8. For √$_{{}$ $^{32}$= 2, w esay that 2 is th efifth ro ot of 32.\n\nWhen dealing with exponents, a root refers to a number that is repeatedly multiplied by itself a certain number of times to get another number. A radical refers to a number written as shown below.\n\n\\[\\begin{array} { c } { { \\text {degree} } } \\\\ { { \\text {radical sign} } \\longrightarrow \\begin{array} { c } { { \\sqrt { n } } } \\\\ { { \\uparrow } } \\\\ { { \\text {radicand} } } \\end{array} \\right \\} \\text {radical} } \\end{array}\\]\n\n⚫ See video: 223K at www.everythingmaths.co.za\n\nThe radical symbol and degree show which root is being determined. The radicand is the number under the radical symbol.\n\n· If n is an even natural number, then the radicand must be positive, otherwise the roots are not real. For example, 4 16 = 2 since 2 × 2 × 2 × 2 = 16 , but the roots of 4 16 are not real since ( - 2 ) × ( - 2 ) × ( - 2 ) × ( - 2 ) ̸ = - 16 ."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00016_4cf02adf2d9d",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0005",
+      "general_1_16_40_p0006"
+    ],
+    "text": "1.2 Rational exponents and surds 1.2 Rational exponents and surds\n\n16 = 2 since 2 × 2 × 2 × 2 = 16 , but the roots of 4 16 are not real since ( - 2 ) × ( - 2 ) × ( - 2 ) × ( - 2 ) ̸ = - 16 .\n\n· If n is an odd natural number, then the radicand can be positive or negative. For example, 3 3 27 = 3 since 3 × 3 × 3 = 27 and we can also determine 3 3 27 = -3 since ( -3 ) × ( -3 ) × ( -3 ) = -27.\n{ 3 3 27 = 3 since 3 × 3 × 3 = 27 and we can also determine 3 3 27 = -3 since ( -3 ) × ( -3 ) × ( -3 ) = -27.\n\n\\[\\begin{array} { r l } & { \\text {It is also possible for there to be more than one $n^{th}$ root of a number. For example,} \\\\ & { \\left ( - 2 \\right ) ^ { 2 } = 4 \\text { and } 2 ^ { 2 } = 4 , \\text { so both } - 2 \\text { and } 2 \\text { are square roots of } 4 . } \\end{array}\\]\n\nA surd is a radical which results in an irrational number. Irrational numbers are num- bers that cannot be written as a fraction with the numerator and the denominator as integers. For example, √ 12 , √ 100 , √ 25 are surds."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00017_e6bd418deaa1",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0006",
+      "general_1_16_40_p0007"
+    ],
+    "text": "Worked example 3: Rational exponents\nQUESTION Write each of the following as a radical and simplify where possible:\n\nWrite each of the following as a radical and simplify where possible: This is a radical and simplify where possible:\n\n2 . \\, ( - 1 2 5 ) ^ { - \\frac { 1 } { 3 } }\n\n\\[3 . \\, 4 ^ { \\frac { 3 } { 2 } }\\]\n\n\\[4 . \\, ( - 8 1 ) ^ { \\frac { 1 } { 2 } }\\]\n\n\\[5 . \\ ( 0 { , } 0 0 8 ) ^ { \\frac { 1 } { 3 } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00018_2f6760e53d57",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0007"
+    ],
+    "text": "SOLUTION\n\n\\[1 . \\ 1 8 ^ { \\frac { 1 } { 2 } } = \\sqrt { 1 8 }\\]\n\n\\[2 . ( - 1 2 5 ) ^ { - { \\frac { 1 } { 3 } } } = { \\sqrt { [ } 3 ] { ( - 1 2 5 ) ^ { - 1 } } } = { \\sqrt { [ } 3 ] { ( - 1 2 5 ) ^ { - 1 } } } } = { \\sqrt { [ } 3 ] { \\frac { 1 } { - 1 2 5 } } } = { \\sqrt { [ } 3 ] { \\frac { 1 } { ( - 5 ) ^ { 3 } } } } = - { \\frac { 1 } { 5 } }\\]\n\n\\[3 . \\, 4 ^ { \\frac { 3 } { 2 } } = ( 4 ^ { 3 } ) ^ { \\frac { 1 } { 2 } } = \\sqrt { 4 ^ { 3 } } = \\sqrt { 6 4 } = 8\\]\n\n\\[4 . \\, \\left ( - 8 1 \\right ) ^ { \\frac { 1 } { 2 } } = \\sqrt { - 8 1 } = { \\mathrm { n o t r a l } }\\]\n\n\\[5 . ( 0 , 0 0 8 ) ^ { \\frac { 1 } { 3 } } = \\sqrt { [ } 3 ] { \\frac { 8 } { 1 0 0 0 } } = \\sqrt { [ } 3 ] { \\frac { 2 ^ { 3 } } { 1 0 ^ { 3 } } } = \\frac { 2 } { 1 0 } = \\frac { 1 } { 5 }\\]\n\n✷ See video: 223M at www.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00019_5a0c00e35e81",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0007"
+    ],
+    "text": "SOLUTION\n\n✷ See video: 223M at www.everythingmaths.co.za\n\n✷ See video: 223M at www.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00020_54004fcf78f2",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0007"
+    ],
+    "text": "Worked example 4: Rational exponents\n<_SQL_>QUESTION\n\nSimplify without using a calculator: Simplify without using a calculator:\n\n\\[\\left ( { \\frac { 5 } { 4 ^ { - 1 } - 9 ^ { - 1 } } } \\right ) ^ { \\frac { 1 } { 2 } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00021_803d0517dbb8",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0007",
+      "general_1_16_40_p0008"
+    ],
+    "text": "SOLUTION\n\nStep 1: Write the fraction with positive exponents in the denominator\n\n\\[\\left ( { \\frac { 5 } { \\frac { 1 } { 4 } - \\frac { 1 } { 9 } } } \\right ) ^ { \\frac { 1 } { 2 } }\\]\n\nStep 2: Simplify the denominator\n\n\\[= \\left ( { \\frac { 5 } { \\frac { 9 - 4 } { 3 6 } } } \\right ) ^ { \\frac { 1 } { 2 } }\\]\n\nStep 3: Take the square root\n\n\\[= \\sqrt { 3 6 }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00022_4c11eb1750f4",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0008"
+    ],
+    "text": "Step 3: Take the square root\n\n1. Simplify the following and write answers with positive exponents:\n\n1. Simplify the following and write answers with positive exponents: √49 a) √\n\n\\[b ) \\, \\sqrt { 3 6 ^ { - 1 } }\\]\n\n1. Simplify the following and write answers with positive exponents: √49 a) √36 -\n\n\\[d ) = \\sqrt { [ } 3 ] { - \\frac { 6 4 } { 2 7 } }\\]\n\n2. Simplify: $^{a)}$s 1 2 ÷ s 1 3 = (64m6) 2 3\n\n2. Simplify:\n\n2. Simplify:\n\n1. Simplify the following and write answers with positive exponents: √49 a) √36 -1 b) �\n\nExercise 1 -3: Rational exponents and surds\n\n3. Use the laws to re-write the following expression as a power of x : 3. Use the laws to re-write the following expression as a power of x :\n\n\\[x \\sqrt { x \\sqrt { x \\sqrt { x \\sqrt { x } } } }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n\\[1 a . \\ 2 2 3 P\\]\n\n1a. 223P 1b. 223Q 1c. 223R\n\n\\[1 b . \\ 2 2 3 Q\\]\n\n\\[1 c . \\ 2 2 3 R\\]\n\n1a. 223P 1b. 223Q 1c. 223R 1d.\n\n1a. 223P 1b. 223Q 1c. 223R 1d.\n\n\\[2 b . \\ 2 2 3 W\\]\n\n1a. 223P 1b. 223Q 1c. 223R\n\n2b. 223W 2c. 223X 2d. 223Y\n\n\\[3 . 2 2 3 Z\\]\n\nm.everythingmaths.co.za\n\nwww.everythingmaths.co.za\nChapter 1. Exponents and surds\nThink you got it? Get this answer and more practice on"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00023_6083c1ee5005",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0009"
+    ],
+    "text": "Simplification of surds\nWe have seen in previous examples and exercises that rational exponents are closely related to surd. It is often useful to write a surd in exponential notation as it allows us\n\nWe have seen in previous examples and exercises that rational exponents are closely related to surds. It is often useful to write a surd in exponential notation as it allows us to use the exponential laws.\n\nThe additional laws listed below make simplifying surds easier: The additional laws listed below make simplifying surds easier:\n\nThe additional laws listed below make simplifying surds easier:\n\n\\[\\bullet \\, \\sqrt { [ } n ] { \\frac { a } { b } } = \\frac { \\sqrt { [ } n ] { a } } { \\sqrt { [ } n ] { b } }\\]\n\nthe additional laws listed below make simplifying surds easier.\n\n\\bullet \\, \\sqrt { [ } n ] { a ^ { m } } = a ^ { \\frac { m }\n\nThe additional laws listed below make simplifying surds easier:"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00024_71d1fd6af071",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0009"
+    ],
+    "text": "Worked example 5: Simplifying surds\nQuestion Show that: √$_{a}$ × √$_{_}$ b = √$_{/}$ ab 1. √$_{%\n\nShow that:\n\n\\[\\begin{array} { r l } { 1 . } & \\sqrt { [ } n ] { a } \\times \\sqrt { [ } n ] { b } = \\sqrt { [ } n ] { a b } } \\\\ { 2 . } & \\sqrt { [ } n ] { \\frac { a } { b } } = \\frac { \\sqrt { [ } n ] { a } } { \\sqrt { [ } n ] { b } } } \\end{array}\\]\n\n\\[1 . \\, \\stackrel { n } { \\sqrt { [ } n ] { a } } \\times \\stackrel { n } { \\sqrt { [ } n ] { b } } = \\stackrel { n } { \\sqrt\\]\n\n\\[2 . \\sqrt { [ } n ] { \\frac { a } { b } } = \\frac { \\sqrt { [ } n ] { a } } { \\sqrt { [ } n ] { b } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00025_7bb9fedfcaf0",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0009",
+      "general_1_16_40_p0010"
+    ],
+    "text": "1. Show that: √$_{a}$ × √$_{_b}$ = √$_{{}$\n\n<_SQL_>1.\n\n2.\n\n\\[\\sqrt { [ } n ] { a } \\times \\sqrt { [ } n ] { b } = a ^ { \\frac { 1 } { n } } \\times b ^ { \\frac { 1 } { n } } \\\\ = ( a b ) ^ { \\frac { 1 } { n } } \\\\ = \\sqrt { [ } n ] { a b }\\]\n\n\\[\\begin{array} { r } { \\sqrt { [ } n ] { \\frac { a } { b } } = \\left ( \\frac { a } { b } \\right ) ^ { \\frac { 1 } { n } } } \\\\ { = \\frac { a ^ { \\frac { 1 } { n } } } { b ^ { \\frac { 1 } { n } } } } \\\\ { = \\frac { \\sqrt { [ } n ] { a } } { \\sqrt { [ } n ] { b } } } \\end{array}\\]\n\nExamples:\n\n\\[1 . \\, \\sqrt { 2 } \\times \\sqrt { 3 2 } = \\sqrt { 2 \\times 3 2 } = \\sqrt { 6 4 } = 8\\]\n\n\\[2 . { \\frac { \\sqrt { [ } 3 ] { 2 4 } } { \\sqrt { [ } 3 ] { 3 } } } = { \\sqrt { [ } 3 ] { \\frac { 2 4 } { 3 } } } = { \\sqrt { [ } 3 ] { 8 } } = 2\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00026_e96cbb782655",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0009",
+      "general_1_16_40_p0010"
+    ],
+    "text": "1. Show that: √$_{a}$ × √$_{_b}$ = √$_{{}$\n\n<_SQL_>1.\n\n2.\n\nExamples:\n\n3 . \\, \\sqrt { \\sqrt { 8 1 } } = \\sqrt { [ } 4 ] { 8 1 } = \\sqrt { [ } 4 ] { 3 ^ {"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00027_aa6c6a3ae3c8",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0010"
+    ],
+    "text": "Like and unlike surds Like and unlike surds\n\nEMBF7\n\nTwo surds n a and √ b are like surds if m = n , otherwise they are called unlike surds. For example, √ 1 3 and -√ 61 are like surd s because m = n = 2 . Examples of unlike surds are √ 5 3 and 5 √ y $^{3}$since m ≠ n ."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00028_0add07da34a2",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0010"
+    ],
+    "text": "Simplest surd form Simplest surd form\n\nEMBF8\n\nWe can sometimes simplify surds by writing the radicand as a product of factors that can be further simplified using √√ ab = √√ a × √√ b .\n\n2242 at www.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00029_1de1d3ad077c",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0010"
+    ],
+    "text": "Worked example 6: Simplest surd form\nQUESTION\n\nWrite the following in simplest surd form: √ 50\n√ 50\n\n\\[\\sqrt { 5 0 }\\]\n\nWrite the following in simplest surd form:"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00030_69e3f493e1ab",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0010",
+      "general_1_16_40_p0011"
+    ],
+    "text": "SOLUTION\n\nStep 1: Write the radicand as a product of prime factors\n\nStep 1: Write the radicand as a product of prime factors\n\n\\[{ \\sqrt { 5 0 } } = { \\sqrt { 5 \\times 5 \\times 2 } } \\\\ = { \\sqrt { 5 ^ { 2 } \\times 2 } }\\]\n\nStep 2: Simplify using n √ ab = v a × $^{√}$b\n\n\\[\\begin{array} { l } { { = \\sqrt { 5 ^ { 2 } } \\times \\sqrt { 2 } } } \\\\ { { = 5 \\times \\sqrt { 2 } } } \\\\ { { = 5 \\sqrt { 2 } } } \\end{array}\\]\n\nSometimes a surd cannot be simplified. For example, √ 6, √ 3 0 and √ 4 2 are already in their simplest form."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00031_dd76a2fc86f7",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0011"
+    ],
+    "text": "Worked example 7: Simplest surd form\n\\[Q U E S T I O N\\]\n\n\\[\\sqrt { [ } 3 ] { 5 4 }\\]\n\nWrite the following in simplest surd form: √ 3 √ 54\n\\[\\text {Write the following in simplest surd form: } \\sqrt { 5 4 }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00032_d8b9c7385ef2",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0011"
+    ],
+    "text": "SOLUTION\nStep 1: Write the radicand as a product of prime factors\n\n\\[{ \\sqrt { [ } 3 ] { 5 4 } } & = { \\sqrt { [ } 3 ] { 3 \\times 3 \\times 3 \\times 2 } } \\\\ & = { \\sqrt { [ } 3 ] { 3 ^ { 3 } \\times 2 } }\\]\n\n\\[\\begin{array} { r } { \\text {Step 2: Simplify using } \\sqrt { a b } = \\sqrt { a } \\times \\sqrt { b } } \\end{array}\\]\n\n\\[\\begin{array} { l } { { { \\sqrt { 3 } } { { \\sqrt { 3 } } } \\times { { \\sqrt { 3 } } } { { \\sqrt { 2 } } } } } \\\\ { { = { { \\sqrt { 3 } } { { \\sqrt { 3 } } }\\]\n\n= 3 √2 3"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00033_92271cb5a0ba",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0011"
+    ],
+    "text": "Worked example 8: Simplest surd form\nQUESTION\n\n\\[S i m p l i f y \\colon \\sqrt { 1 4 7 } + \\sqrt { 1 0 8 }\\]\n\nSimplify:"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00034_184f58dbb12b",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0011",
+      "general_1_16_40_p0012"
+    ],
+    "text": "SOLUTION\nStep 1: Write the radicands as a product of prime factors\n\n\\[\\begin{array} { r } { \\sqrt { 1 4 7 } + \\sqrt { 1 0 8 } = \\sqrt { 4 9 \\times 3 } + \\sqrt { 3 6 \\times 3 } } \\\\ { = \\sqrt { 7 ^ { 2 } \\times 3 } + \\sqrt { 6 ^ { 2 } \\times 3 } } \\end{array}\\]\n\n\\[\\begin{array} { r } { \\text {Step 2: Simplify using } \\sqrt { a b } = \\sqrt { a } \\times \\sqrt { b } } \\end{array}\\]\n\n\\[{ \\begin{array} { r l } & { = \\left ( { \\sqrt { 7 ^ { 2 } } } \\times { \\sqrt { 3 } } \\right ) + \\left ( { \\sqrt { 6 ^ { 2 } } } \\times { \\sqrt { 3 } } \\right ) } \\\\ & { = \\left ( 7 \\times { \\sqrt { 3 } } \\right ) + \\left ( 6 \\times { \\sqrt { 3 } } \\right ) } \\\\ & { = 7 { \\sqrt { 3 } } + 6 { \\sqrt { 3 } } } \\end{array} }\\]\n\nStep 3: Simplify and write the final answer\n\n\\[1 3 \\sqrt { 3 }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00035_e9685d6f3771",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0012"
+    ],
+    "text": "Worked example 9: Simplest surd form\nSection 3: Simplify and write the final answer\n\n\\[S i m p l i f y \\colon \\left ( { \\sqrt { 2 0 } } - { \\sqrt { 5 } } \\right ) ^ { 2 }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00036_c14be6e72f70",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0012"
+    ],
+    "text": "SOLUTION\n\nStep 1: Factorise the radicands were possible\n\n\\[\\left ( { \\sqrt { 2 0 } } - { \\sqrt { 5 } } \\right ) ^ { 2 } = \\left ( { \\sqrt { 4 \\times 5 } } - { \\sqrt { 5 } } \\right ) ^ { 2 }\\]\n\nStep 2: Simplify using √ ab = √ a × √ b\n\n\\[\\begin{array} { l } { { \\begin{array} { l } { { = } \\left ( { \\sqrt { 4 } } \\times { \\sqrt { 5 } } - { \\sqrt { 5 } } \\right ) ^ { 2 } } \\\\ { { = } \\left ( 2 \\times { \\sqrt { 5 } } - { \\sqrt { 5 } } \\right ) ^ { 2 } } \\\\ { { = } \\left ( 2 { \\sqrt { 5 } } - { \\sqrt { 5 } } \\right ) ^ { 2 } } \\end{array} } } \\end{array}\\]\n\nStep 3: Simplify and write the final answer\n\n\\[\\begin{array} { l } { { = \\left ( { \\sqrt { 5 } } \\right ) ^ { 2 } } } \\\\ { { = 5 } } \\end{array}\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00037_c73690e6e87f",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0013"
+    ],
+    "text": "<_YAML_>Worked example 10: Simplest surd form with fractions\nQUESTION\n\nWrite in simplest surd form: √75 × 3 (48) -1 Solution Step 1: Factorise the radicands were possible\n\n\\[\\sqrt { 7 5 } \\times \\sqrt { [ } 3 ] { ( 4 8 ) ^ { - 1 } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00038_4931cf07f2a9",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0013"
+    ],
+    "text": "SOLUTION\nStep 1: Factorise the radicands were possible\n\n\\[\\begin{array} { r } { \\sqrt { 7 5 } \\times \\sqrt { [ } 3 ] { ( 4 8 ) ^ { - 1 } } = \\sqrt { 2 5 \\times 3 } \\times \\sqrt { [ } 3 ] { \\frac { 1 } { 4 8 } } } \\\\ { = \\sqrt { 2 5 \\times 3 } \\times \\frac { 1 } { \\sqrt { [ } 3 ] { 8 \\times 6 } } } \\end{array}\\]\n\n2. Simplify and write answers with positive exponents: a) √16 × $^{3}$4 = b) √a$^{2}$b3 × √b$^{5}$c4\n\n\\[\\sqrt { [ } n ] { a b } = \\sqrt { [ } n ] { a } \\times \\sqrt { [ } n ] { b }\\]\n\n\\[{ \\begin{array} { r l } & { = { \\sqrt { 2 5 } } \\times { \\sqrt { 3 } } \\times { \\frac { 1 } { { \\sqrt { 3 } } { \\sqrt { 8 } } \\times { \\sqrt { 3 } } { \\sqrt { 6 } } } } } \\\\ & { = 5 \\times { \\sqrt { 3 } } \\times { \\frac { 1 } { 2 \\times { \\sqrt { 3 } } { \\sqrt { 6 } } } } } \\end{array} }\\]\n\nStep 3: Simplify and write the final answer\n\nStep 3: Simplify and write the final answer\n\n\\[= 5 \\sqrt { 3 } \\times { \\frac { 1 } { 2 \\sqrt { 3 } } } } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00039_62f6f20981f6",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0013"
+    ],
+    "text": "Exercise 1 - 4: Simplification of surds\n\n1. Simplify the following and write answers with positive exponents:\n\n\\[d ) \\, \\sqrt { x ^ { 2 } y ^ { 1 3 } } \\div \\sqrt { y ^ { 5 } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00040_8f9ad4d2fba6",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0014"
+    ],
+    "text": "2. Simplify the following:\n2. Simplify the following:\n\n\\[a ) \\, \\left ( \\frac { 1 } { a } - \\frac { 1 } { b } \\right ) ^ { - 1 }\\]\n\n\\[\\begin{array} { l } { { a ) } \\left ( \\frac { 1 } { a } - \\frac { 1 } { b } \\right ) ^ { - 1 } } \\\\ { { b ) } \\left ( \\frac { b - a } { a ^ { \\frac { 1 } { 2 } } - b ^ { \\frac { 1 } { 2 } } } } \\end{array}\\]\n\n\\[b ) = { \\frac { b - a } { a ^ { \\frac { 1 } { 2 } } - b ^ { \\frac { 1 } { 2 } } } }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n1a.2243 1b.2244 1c.2245 1d\n\n2 \\text subscript { b } . \\ 2 2 4 8\n\nwww.everythingmaths.co.za\nRationalising denominators</section_header\n\nm.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00041_c0b6ff05625a",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0014"
+    ],
+    "text": "Rationalising denominators Rationalising denominators\n\nEMBF9\n\nIt is often easier to work with fractions that have rational denominators instead of surd denominators. By rationalising the denominator, we convert a fraction with a surd in the denominator to a fraction that has a rational denominator."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00042_a71e55535fd8",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0014"
+    ],
+    "text": "Worked example 11: Rationalising the denominator\nQUESTION\n\nRationalise the denominator: Rationalise the denominator:\n\n\\[\\frac { 5 x - 1 6 } { \\sqrt { x } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00043_c2dffe9cbda0",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0014"
+    ],
+    "text": "SOLUTION\n\nStep 1: Multiply the fraction by √ x √ x\n\nNotice that √$_{x}$ √$_{}$ = 1, so the value of the fraction has not been changed.\n\n\\[{ \\frac { 5 x - 1 6 } { \\sqrt { x } } } \\times { \\frac { \\sqrt { x } } { \\sqrt { x } } } = { \\frac { \\sqrt { x } ( 5 x - 1 6 ) } { \\sqrt { x } \\times \\sqrt { x } } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00044_0a656da0e07e",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0014"
+    ],
+    "text": "Step 2: Simplify the denominator\n\n\\[= { \\frac { \\sqrt { x } ( 5 x - 1 6 ) } { { ( \\sqrt { x } ) } ^ { 2 } } }\\]\n\n\\[= { \\frac { \\sqrt { x } ( 5 x - 1 6 ) } { x } }\\]\n\nThe term in the denominator has changed from a surd to a rational number. Expressing the surd in the numerator is the preferred way of writing expressions."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00045_0b961a6489f6",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0015"
+    ],
+    "text": "Worked example 12: Rationalising the denominator\nQUESTION\n\nWrite the following with a rational denominator:\n\n\\[\\frac { y - 2 5 } { \\sqrt { y } + 5 }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00046_675b7cb8c70b",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0015"
+    ],
+    "text": "SOLUTION\n\nTo eliminate the surd from the denominator, we must multiply the fraction by an ex- pression that will result in a difference of two squares in the denominator.\n\n\\[{ \\frac { y - 2 5 } { \\sqrt { y } + 5 } } \\times { \\frac { \\sqrt { y } - 5 } { \\sqrt { y } - 5 } }\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00047_ad9e366ab32a",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0015"
+    ],
+    "text": "Step 2: Simplify the denominator\n\n\\[= { \\frac { ( y - 2 5 ) ( { \\sqrt { y } } - 5 ) } { ( { \\sqrt { y } } + 5 ) ( { \\sqrt { y } } - 5 ) } }\\]\n\n\\[= { \\frac { ( y - 2 5 ) ( { \\sqrt { y } } - 5 ) } { ( { \\sqrt { y } } ) ^ { 2 } - 2 5 } }\\]\n\n\\[= { \\frac { ( y - 2 5 ) ( { \\sqrt { y } } - 5 ) } { y - 2 5 } }\\]\n\n\\[= { \\sqrt { y } } - 5\\]\n\n2. 3 √ 6 = 7. 3. t -4 √ t +2 8. (1+√m) -1 9. x . a ( √a ÷ √b ) -1\n\n2. 3 √6 = 7. 3. t -4 √t +2 8. (1+√m) -1 9. x . a ( √a ÷ √b ) -1"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00048_549e64698272",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0015",
+      "general_1_16_40_p0016"
+    ],
+    "text": "Exercise 1 - 5:\nRationalising the denominator\n\nRationalise the denominator in each of the following: Rationalise the denominator in each of the following:\n\n\\[1 . { \\frac { 1 0 } { \\sqrt { 5 } } }\\]\n\n\\[6 . \\, \\frac { \\sqrt { 3 } + \\sqrt { 7 } } { \\sqrt { 2 } }\\]\n\n\\[3 . \\, \\frac { 2 } { \\sqrt { 3 } } \\div \\frac { \\sqrt { 2 } } { 3 }\\]\n\n\\[4 . \\, \\frac { 3 } { \\sqrt { 5 } - 1 }\\]\n\n\\[5 . \\, \\frac { x } { \\sqrt { y } }\\]\n\n\\[7 . \\, \\frac { 3 \\sqrt { p } - 4 } { \\sqrt { p } }\\]\n\n\\[8 . \\, \\frac { t - 4 } { \\sqrt { t + 2 } }\\]\n\n\\[9 . \\left ( 1 + \\sqrt { m } \\right ) ^ { - 1 }\\]\n\n\\[1 0 . \\ a \\left ( \\sqrt { a } \\div \\sqrt { b } \\right ) ^ { - 1 }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00049_e422de5acbf3",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0015",
+      "general_1_16_40_p0016"
+    ],
+    "text": "Exercise 1 - 5:\nRationalising the denominator\n\nthe following: Rationalise the denominator in each of the following:\n\n\\[5 . \\, \\frac { x } { \\sqrt { y } }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n\\[\\begin{array} { l l l l } { 1 . 2 2 4 B } & { 2 . 2 2 4 C } & { 3 . 2 2 4 D } & { 4 . 2 2 4 F } & { 5 . 2 2 4 G } & { 6 . 2 2 4 H } \\\\ { 7 . 2 2 4 J } & { 8 . 2 2 4 K } & { 9 . 2 2 4 M } & { 1 0 . 2 2 4 N } & { 2 } \\end{array}\\]\n\n7.224J 8.224K 9.224M 10.224N\n\nm.everythingmaths.co.za\n\nwww.everythingmaths.co.za\n1.3 Solving surd equations</section_header\n\nm.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00050_c38206d9a746",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0016"
+    ],
+    "text": "1.3 Solving surd equations 1.3.1\n\nWe also need to be able to solve equations that involve surds.\n\nSee video: 224P at www.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00051_db670cecba02",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0016"
+    ],
+    "text": "Worked example 13:\nSurd equations\n<_SQL_>QUESTION\n\n1.3 Solving surd equations\n\nSolve for x :"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00052_93754a844bac",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0016"
+    ],
+    "text": "SOLUTION\n\nStep 1: Write in exponential notation\n\nStep 1: Write in exponential notation\n\n\\[\\begin{array} { r } { 5 \\left ( x ^ { 4 } \\right ) ^ { \\frac { 1 } { 3 } } = 4 0 5 } \\\\ { 5 x ^ { \\frac { 4 } { 3 } } = 4 0 5 }\\]\n\nStep 2: Divide both sides of the equation by 5 and simplify\n\nStep 2: Divide both sides of the equation by 5 and simplify\n\n\\[{ \\frac { 5 x ^ { \\frac { 4 } { 3 } } } { 5 } } = { \\frac { 4 0 5 } { 5 } } \\\\ x ^ { \\frac { 4 } { 3 } } = 8 1 \\\\ x ^ { \\frac { 4 } { 3 } } = 3 ^ {\\]\n\n<_YAML_>Step 3: Simplify the exponents\n\n<_YAML_>Step 3: Simplify the exponents\n\n\\[\\left ( x ^ { \\frac { 4 } { 3 } } \\right ) ^ { \\frac { 3 } { 4 } } = \\left ( 3 ^ { 4 } \\right ) ^ { \\frac { 3 } { 4 } } \\\\ x = 3 ^ { 3 } \\\\ x = 2 7\\]\n\nEMBERB"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00053_4f3ee3ebe75d",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0017"
+    ],
+    "text": "Step 4: Check the solution by substituting the answer back into the original equation\n\n\\[LHS = 5 \\sqrt { x ^ { 4 } } \\\\ = 5 ( 2 7 ) ^ { \\frac { 4 } { 3 } } \\\\ = 5 ( 3 ^ { 3 } ) ^ { \\frac { 4 } { 3 } } \\\\ = 5 ( 3 ^ { 4 } ) \\\\ = 4 0 5 \\\\ = RHS\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00054_97f20436eecc",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0017"
+    ],
+    "text": "Worked example 14: Surd equations\nQUESTION\n\n\\[S o l v e \\, f o r \\ z \\colon \\ z - 4 \\sqrt { z } + 3 = 0\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00055_bc297d21ee2b",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0017"
+    ],
+    "text": "SOLUTION\nStep 1: Factorise\n\n\\[z - 4 \\sqrt { z } + 3 = 0\\]\n\n\\[z - 4 z ^ { \\frac { 1 } { 2 } } + 3 = 0\\]\n\n\\[( z ^ { \\frac { 1 } { 2 } } - 3 ) ( z ^ { \\frac { 1 } { 2 } } - 1 ) = 0\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00056_1a5cb3286245",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0017",
+      "general_1_16_40_p0018"
+    ],
+    "text": "Step 2: Solve for both factors\n\nThe zero law states: if a × b = 0 , then a = 0 or b = 0 .\n\nThe zero law states:\n\n\\[\\therefore \\left ( z ^ { \\frac { 1 } { 2 } } - 3 \\right ) = 0 \\, o r \\, \\left ( z ^ { \\frac { 1 } { 2 } } - 1 \\right ) = 0\\]\n\nTherefore\n\n\\[z ^ { \\frac { 1 } { 2 } } - 3 = 0\\]\n\n\\[z ^ { \\frac { 1 } { 2 } } = 3\\]\n\n\\[\\left ( z ^ { \\frac { 1 } { 2 } } \\right ) ^ { 2 } = 3 ^ { 2 }\\]\n\n\\[z = 9\\]\n\nStep 3: Check the solution by substituting both answers back into the original equation.\n\n\\[\\begin{array} { r } { z ^ { \\frac { 1 } { 2 } } - 1 = 0 } \\\\ { z ^ { \\frac { 1 } { 2 } } = 1 } \\\\ { \\left ( z ^ { \\frac { 1 } { 2 } } \\right ) ^ { 2 } = 1 ^ { 2 } } \\\\ { z = 1 } \\end{array}\\]\n\nStep 3: Check the solution by substituting both answers back into the original equa- tion\ntion\n\nStep 3: Check the solution by substituting both answers back into the original equa- tion\ntion\n\n\\[I f \\ z = 9 \\colon\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00057_ced52879c633",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0017",
+      "general_1_16_40_p0018"
+    ],
+    "text": "Step 2: Solve for both factors\n\nStep 3: Check the solution by substituting both answers back into the original equa- tion\ntion\n\nStep 3: Check the solution by substituting both answers back into the original equa- tion\ntion\n\n\\[I f \\ z = 9 \\colon\\]\n\n\\[\\begin{array} { l } { L H S } = z - 4 \\sqrt { z } + 3 \\\\ { } = 9 - 4 \\sqrt { 9 } + 3 \\\\ { } = 1 2 - 1 2 \\\\ { } = 0 \\\\ { } = R H S \\end{array}\\]\n\n\\[I f \\ z = 1 \\colon\\]\n\n\\[\\begin{array} { l } { L H S } = z - 4 \\sqrt { z } + 3 \\\\ = 1 - 4 \\sqrt { 1 } + 3 \\\\ = 4 - 4 \\\\ = 0 \\\\ = R H S \\end{array}\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00058_39fe3aac0ca8",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0018"
+    ],
+    "text": "Step 4: Write the final answer\n\nThe solution to z - 4 \\sqrt { z } + 3 = 0 { i s } z = 9 { o r } z = 1 ."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00059_6ce9bd590320",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0018"
+    ],
+    "text": "Worked example 15: Surd equations\nQUESTION\n\n\\[S o l v e \\ f o r \\ p \\colon \\sqrt { p - 2 } - 3 = 0\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00060_7fa05d5bdf5c",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0018",
+      "general_1_16_40_p0019"
+    ],
+    "text": "SOLUTION\nStep 1: Write the equation with only the square root on the left hand side\n\nUse the additive inverse to get all other terms on the right hand side and only the\n\nsquare root on the left hand side.\n\n\\[{ \\sqrt { p - 2 } } = 3\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00061_f75796641fbe",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0019"
+    ],
+    "text": "Step 2: Square both sides of the equation\n\n\\[\\left ( \\sqrt { p - 2 } \\right ) ^ { 2 } = 3 ^ { 2 } \\\\ p - 2 = 9 \\\\ p = 1 1\\]\n\nStep 3: Check the solution by substituting the answer back into the original equation If p = 11:\n\nStep 3: Check the solution by substituting the answer back into the original equation If p = 11:\n\n\\[L H S & = \\sqrt { p - 2 } - 3 \\\\ & = \\sqrt { 1 1 - 2 } - 3 \\\\ & = \\sqrt { 9 } - 3 \\\\ & = 3 - 3 \\\\ & = 0 \\\\ & = R H S\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00062_c12be16bcf25",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0019"
+    ],
+    "text": "Step 4: Write the final answer\n\nThe solution to \\sqrt { p - 2 } - 3 = 0 { i s } p = 1 1 ."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00063_71b068e93bf5",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0019"
+    ],
+    "text": "Exercise 1 - 6: Solving surd equations\n\nSolve for the unknown variable (remember to check that the solution is valid): :\n\n\\[1 . \\ 2 ^ { x + 1 } - 3 2 = 0\\]\n\n2 . \\, 1 2 5 \\left ( 3 ^ { p } \\right ) = 2 7 \\left ( 5 ^ { p }\n\n\\[3 . \\, 2 y ^ { \\frac { 1 } { 2 } } - 3 y ^ { \\frac { 1 } { 4 } } + 1 = 0\\]\n\n\\[4 . \\ t - 1 = \\sqrt { 7 - t }\\]\n\n\\[5 . \\ 2 z - 7 \\sqrt { z } + 3 = 0\\]\n\n\\[6 . \\, x ^ { \\frac { 1 } { 3 } } ( x ^ { \\frac { 1 } { 3 } } + 1 ) = 6\\]\n\n\\[7 . \\, 2 ^ { 4 n } - { \\frac { 1 } { \\sqrt { [ } 4 ] { 1 6 } } } = 0\\]\n\n\\[8 . \\, \\sqrt { 3 1 - 1 0 d } = 4 - d\\]\n\n\\[9 . \\, y - 1 0 \\sqrt { y } + 9 = 0\\]\n\n\\[1 0 . \\, f = 2 + \\sqrt { 1 9 - 2 f }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n\\[7 . 2 2 4 X\\]\n\n\\[4 . 2 2 4 T\\]\n\n\\[1 0 . \\ 2 2 5 2\\]\n\nwww.everythingmaths.co.za\n\nm.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00064_bade3ff4c501",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0020"
+    ],
+    "text": "1.4 Applications of exponentials 1.4.1 Applications of exponentials\n\nThere are many real world applications that require exponents. For example, expo- nentials are used to determine population growth and they are also used in finance to calculate different types of interest."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00065_9ac9d01abb9d",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0020"
+    ],
+    "text": "Worked example 16: Applications of exponentials\n<_SQL_>QUESTION\n\nA type of bacteria has a very high exponential growth rate at 80% every hour. If there are 10 bacteria, determine how many there will be in five hours, in one day and in one week? one week?"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00066_f332219f6863",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0020"
+    ],
+    "text": "SOLUTION\n<_YAML_><_YAML_># Step 1: Exponential formula\n# Step 2: Exponential formula\n\nfinal population = initial population × (1 + growth percentage) \"time period in hours \"\n\nTherefore, in this case:\n\n\\[\\text {final population} = 1 0 \\, ( 1 , 8 ) ^ { n }\\]\n\nwhere n = number of hours.\n\nStep 2: In 5 hours\nIn 5 hours\n\nStep 2: In 5 hours\nIn 5 hours\n\n\\[f i n a l p o p u l a t i o n \\, = \\, 1 0 \\, ( 1 , 8 ) ^ { 5 } \\approx 1 8 9\\]\n\nStep 3: In 1 day = 24 hours\n\n\\[\\text {final population} \\, = \\, 1 0 \\, ( 1 , 8 ) ^ { 2 4 } \\approx 1 3 \\, 3 8 2 \\, 5 8 8\\]\n\n\\[\\begin{array} { r l } { \\text {Step 4: In 1 week} } & { = 1 6 8 \\text { hours} } \\end{array}\\]\n\n\\[\\begin{array} { r l } { \\text {Step 4: In 1 week} } & { = 1 6 8 \\text { hours} } \\end{array}\\]\n\nNote this answer is given in scientific notation as it is a very big number.\n\nNote this answer is given in scientific notation as it is a very big number."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00067_8674036677da",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0021"
+    ],
+    "text": "Worked example 17: Applications of exponentials\nQUESTION\n\nA species of extremely rare deep water fish has a very long lifespan and rarely has offspring. If there are a total of 821 of this type of fish and their growth rate is 2% each month, how many will there be in half of a year? What will the population be in ten years and in one hundred years? years and in one hundred years?"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00068_b04b0b7bd7b2",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0021"
+    ],
+    "text": "SOLUTION\nStep 1: Exponential formula\n\nfinal population = initial population × (1 + growth percentage) time period in months\n\nTherefore, in this case:\n\n\\[f i n a l p o p u l a t i o n = 8 2 1 ( 1 , 0 2 ) ^ { n }\\]\n\n\\[\\text {where } n = \\text {number of months.}\\]\n\nStep 2: In half a year = 6 months\n\n\\[\\text {final population} = 8 2 1 ( 1 , 0 2 ) ^ { 6 } \\approx 9 2 5\\]\n\nStep 3: In 10 years = 120 months\n\nfinal population = 821(1,02) 120 ≈ 8838\n\n2. The current population of Johannesburg is 3 885 840 and the average rate of population growth in South Africa is 0,7% p.a. What can city planners expect the population of Johannesburg to be in 13 years time?\n\n2. The current population of Johannesburg is 3 885 840 and the average rate of population growth in South Africa is 0,7% p.a. What can city planners expect the population of Johannesburg to be in 13 years time?\n\nNote this answer is also given in scientific notation as it is a very big number."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00069_9f69d6a3eb82",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0021",
+      "general_1_16_40_p0022"
+    ],
+    "text": "Exercise 1 - 7: Applications of exponentials\n\n1. Nqobani invests R 5530 into an account which pays out a lump sum at the end of 6 years. If he gets R 9622,20 at the end of the period, what compound interest rate did the bank offer him? Give answer correct to one decimal place.\n\n2. The current population of Johannesburg is 3 885 840 and the average rate of population growth in South Africa is 0,7% p.a. What can city planners expect the population of Johannesburg to be in 13 years time?\n\n3. Abiona places 3 books in a stack on her desk. The next day she counts the books in the stack and then adds the same number of books to the top of the stack. After how many days will she have a stack of 192 books?\n\n4. A type of mould has a very high exponential growth rate of 40% every hour. If there are initially 45 individual mould cells in the population, determine how many there will be in 19 hours.\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n1.2253 2.2254 3.2255 4.2256\n\nwww.everythingmaths.co.za"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00070_9d5a956df054",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0022"
+    ],
+    "text": "1.5 Summary\n\nSee presentation: 2257 at www.everythingmaths.co.za\n\nEMBFD"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00071_4360343e3b36",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0022"
+    ],
+    "text": "1. The number system:\n1. The number system:\n\n·$_{ }$$_{N}$$_{:}$ natural numbers are { 1 ; 2 ; 3 ; . . . }\n\n№ : whole numbers are {0; 1; 2; 3; ...} ℤ : integers are {... ; -3; -2; -1; 0; 1; ; 2; ; 3; } ℚ : rational numbers are numbers which can be written as\n\nZ : integers are {...; -3; -2; -1; 0; 1; 2; 3; ...} Z : rational numbers are numbers which can be written as a b where a and b are integers and b ̸ = 0 , or as a terminating or recurring decimal number. Q : irrational numbers are numbers that cannot be\n\n·$_{ }$$_{Q}$ : rational numbers are numbers which can be written as a $_{ }$b where a and b are integers and b ̸ = 0 , or as a terminating or recurring decimal number.\n·$_{ }$$_{b}$\n\n·$_{ }$$_{Q}$ ' : irrational numbers are numbers that cannot be written as a fraction with the numerator and denominator as integers. Irrational numbers also include decimal numbers that neither terminate nor recur.\n\n· ℝ : real numbers include all rational and irrational numbers.\n\n· R $^{'}$: non-real numbers or imaginary numbers are numbers that are not real."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00072_6587038ef879",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0022"
+    ],
+    "text": "2. Definitions:\n2. Definitions:\n\n\\[\\bullet \\, \\ a ^ { n } = a \\times a \\times a \\times \\cdots \\times a \\, ( n \\, \\text { times} ) \\, \\quad ( a \\in \\mathbb { R } , n \\in \\mathbb { N } )\\]\n\na 0 = 1 ( a \\neq 0 b e c a u s e 0 ^ { 0 } i s u n d e f i n e d )\n\n\\[\\begin{array} { r } { \\bullet \\, a ^ { - n } = \\frac { 1 } { a ^ { n } } \\quad ( a \\neq 0 \\ b e c a u s e \\frac { 1 } { 0 } \\ i s \\ u n d f i n e d ) } \\end{array}\\]\n\n\\[3 . \\text { Laws of exponents} \\colon\\]\n\n\\bullet \\, \\ a ^ { m } \\times \\ a ^ { n } = \\ a ^\n\n\\[\\bullet \\, \\frac { a ^ { m } } { a ^ { n } } = a ^ { m - n }\\]\n\n( ab ) n = a $^{n}$b n\n\n( a $_{b}$) n = a $^{n}$b n\n\n( $^{a}$m ) n = a mn\n\nwhere a > 0, b > 0 and m, n ∈$_{Z}$ ."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00073_561c07ff1798",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0023"
+    ],
+    "text": "4. Rational exponents and surds:\n4. Rational exponents and surds:\n\n· If r = a , then r = √ [ a ] ( n ≥ 2 )\n\nthe number of steps to reach the end point. The formula for finding the number of steps is n = (n - 1) / 2,\n\n\\[\\bullet \\, a ^ { - \\frac { 1 } { n } } = ( a ^ { - 1 } ) ^ { \\frac { 1 } { n } } = \\sqrt { \\frac { 1 } { a } }\\]\n\nthe number of steps to reach the end point. The number of steps is calculated by dividing the total number of steps (n) by the number of steps required for reaching the end point, which is n = √$_\n\nin the text\n\n5. Simplification of surds: √$_{a}$$_{√}$$_{b}$ = √$_{(}$$_{ab}$$_{)}$$_{ }$\n\n5. Simplification of surds:\n\n\\[\\bullet \\, \\sqrt { [ } n ] { \\frac { a } { b } } = \\frac { \\sqrt { [ } n ] { a } } { \\sqrt { [ } n ] { b } }\\]\n\na) 8 - 2 3"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00074_b1e0229898f6",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0023"
+    ],
+    "text": "Exercise 1 - 8: End of chapter exercises\n\n1. Simplify as far as possible:\n\na) 8 - 2 3\n\na) 8 - 2 3\n\n2. Simplify:\n\na ) \\, \\left ( x ^ { 3 } \\right ) ^ { \\frac {\n\nb ) \\, \\left ( s ^ { 2 } \\right ) ^ { \\frac {\n\na) (x3)$^{4}$$_{3}$ d) ( -m $^{2}$) 4 3\n\n3. Simplify the following:\n\na) 8 - 2 3 b) √16 + 8 - $^{2}$3\n\na) 8 - 2 3 b) √16 + 8 - $^{2}$3\n\na) ( x $^{3}$)$^{4}$$_{3}$ d) ( - m $^{2}$) 4 3 b\n\ne ) - \\left ( m ^ { 2 } \\right ) ^ { \\frac { 4 } {\n\n(3y 4 )$^{2}$\n\nC ) \\ \\left ( a ^ { \\frac { 3 } { 2 } } b ^ { \\frac { 3 } { 4 } }\n\n(a) (4 b$^{3}$c)$^{−5)}$$^{2}$ d) ( − m $^{\n\n3. Simplify the following expression: (a) 3 - $^{2}$b$^{15}$c - $^{5}$\n\n4. Re-write the following expression as a power of x :\n\n\\[\\frac { x \\sqrt { x \\sqrt { x \\sqrt { x \\sqrt { x } } } } } { x ^ { 2 } }\\]\n\n5. Expand:"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00075_ea8d39d27ada",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0023",
+      "general_1_16_40_p0024"
+    ],
+    "text": "Exercise 1 - 8: End of chapter exercises\n\n. Simplify the following expression: (a) 3 - $^{2}$b$^{15}$c - $^{5}$\n\n4. Re-write the following expression as a power of x :\n\n5. Expand:\n\n\\[\\left ( { \\sqrt { x } } - { \\sqrt { 2 } } \\right ) \\left ( { \\sqrt { x } } + { \\sqrt { 2 } } \\right )\\]\n\n6. Rationalise the denominator:\n\n\\[\\frac { 1 0 } { \\sqrt { x } - \\frac { 1 } { x } }\\]\n\n7. Write as a single term with a rational denominator:\n\n\\[\\frac { 3 } { 2 \\sqrt { x } } + \\sqrt { x }\\]\n\n8. Write in simplest surd form:\n\n\\[a ) \\, \\sqrt { 7 2 }\\]\n\n8. Write in simplest surd form: a) √72 e) ( √8 ÷ √2 ) b) √\n\n7. Write as a single term with a rational denominator: √$_{3}$ 2 √$_{/}$ x +\n\n\\[d ) = \\frac { \\sqrt { 1 8 } \\div \\sqrt { 7 2 } } { \\sqrt { 8 } }\\]\n\n\\[e ) \\ \\frac { 4 } { \\left ( \\sqrt { 8 } \\div \\sqrt { 2 } \\right ) }\\]\n\n4 √ 8 ÷ √ 2) (√ 8 = √ 12) ( √ 20 ÷ ∡ 12)\n\n9. Expand and simplify:\nExpand and simplify:\n\n7. Write as a single term with a rational denominator: √$_{3}$ 2 √$_{/}$ x + √\n\nb) (2 + √ 2 ) (1 + √8)"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00076_9070ef28d123",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0023",
+      "general_1_16_40_p0024"
+    ],
+    "text": "Exercise 1 - 8: End of chapter exercises\n\nExpand and simplify:\n\n7. Write as a single term with a rational denominator: √$_{3}$ 2 √$_{/}$ x + √\n\nb) (2 + √ 2 ) (1 + √8)\n\nc) (1 + √3) (1+ √8 + √2)\n\n10. Simplify, without use of a calculator: a) √5 ( √45 +2√80 ) b) √98 - √8 √50\n\n12. Rationalise the denominator:\n\n\\[b ) = { \\frac { { \\sqrt { 9 8 } } - { \\sqrt { 8 } } } { { \\sqrt { 5 0 } } } }\\]\n\n11. Simplify: $ \\sqrt{98}$x6 + √12 8 x 6\n\n\\[\\sqrt { 9 8 x ^ { 6 } } + \\sqrt { 1 2 8 x ^ { 6 } }\\]\n\n12. Rationalise the denominator:\n\n\\[a ) { \\frac { \\sqrt { 5 } + 2 } { \\sqrt { 5 } } }\\]\n\n\\[\\mathbf b ) = \\frac { y - 4 } { \\sqrt { y } - 2 }\\]\n\nc) √$_{98}$ - √$_{|}$$_{2}$$_{+}$ √$_{{}$$_{10}$$_{}}$\n\n13. Evaluate without using a calculator: (2 - √7 )$^{1}$ 2 × (2 + √7) $^{1}$2"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00077_d4adb6248842",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0023",
+      "general_1_16_40_p0024"
+    ],
+    "text": "Exercise 1 - 8: End of chapter exercises\n\n$$_{10}$$_{}}$\n\n13. Evaluate without using a calculator: (2 - √7 )$^{1}$ 2 × (2 + √7) $^{1}$2\n\n\\[\\left ( 2 - { \\frac { \\sqrt { 7 } } { 2 } } \\right ) ^ { \\frac { 1 } { 2 } } \\times \\left ( 2 + { \\frac { \\sqrt { 7 } } { 2 } } \\right ) ^ { \\frac { 1 } { 2 } }\\]\n\n13. Evaluate without using a calculator: 1 2 3 4 5 6 7 8 9 10 11 12 13\n\n13. Evaluate without using a calculator: (2 - √7 )$^{1}$ 2 × (2 + √7) $^{1}$2\n\n\\[{ \\sqrt { \\frac { 8 } { 3 } } } + 5 { \\sqrt { \\frac { 5 } { 3 } } } - { \\sqrt { \\frac { 1 } { 6 } } } = { \\frac { 1 0 { \\sqrt { 1 5 } } + 3 { \\sqrt { 6 } } } { 6 } }\\]\n\n15. Simplify completely by showing all your steps (do not use a calculator):\n\n\\[3 ^ { - \\frac { 1 } { 2 } } \\left [ \\sqrt { 1 2 } + \\sqrt { [ } 3 ] { \\left ( 3 \\sqrt { 3 } \\right ) } \\right ]\\]"
+  },
+  {
+    "chunk_id": "general_1_16_40_c00078_023be6ddf4aa",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0023",
+      "general_1_16_40_p0024"
+    ],
+    "text": "Exercise 1 - 8: End of chapter exercises\n\nusing a calculator: (2 - √7 )$^{1}$ 2 × (2 + √7) $^{1}$2\n\n15. Simplify completely by showing all your steps (do not use a calculator):\n\n16. Fill in the blank surd-form number on the right hand side of the equal sign which will make the following a true statement: - 3 √ 6 × - 2 √ 24 = - √ 18 × ...\nwill make the following a true statement: - 3 6 × - 2 24 = - 18 × ..."
+  },
+  {
+    "chunk_id": "general_1_16_40_c00079_c8d7b1dda69d",
+    "doc_id": "general_1_16_40",
+    "page_ids": [
+      "general_1_16_40_p0025"
+    ],
+    "text": "17. Solve for the unknown variable:\n\n\\[a ) \\, 3 ^ { x - 1 } - 2 7 = 0\\]\n\n\\[\\begin{array} { r } { b ) \\, 8 ^ { x } - \\frac { 1 } { \\sqrt { [ } 3 ] { 8 } } = 0 } \\\\]\n\n\\[c ) \\, 2 7 ( 4 ^ { x } ) = ( 6 4 ) 3 ^ { x }\\]\n\n\\[d ) \\, \\sqrt { 2 x - 5 } = 2 - x\\]\n\n\\[e ) \\, 2 x ^ { \\frac { 2 } { 3 } } + 3 x ^ { \\frac { 1 } { 3 } } - 2 = 0\\]\n\n\\[1 8 . \\quad { a ) } \\ { S h o w t h a t } \\ { \\sqrt { \\frac { 3 ^ { x + 1 } - 3 ^ { x } } { 3 ^ { x - 1 } } + 3 } } \\ { i s e q u a l t o } \\ 3\\]\n\n\\[b ) H e n c e s l o v e \\sqrt { \\frac { 3 ^ { x + 1 } - 3 ^ { x } } { 3 ^ { x - 1 } } + 3 } = \\left ( \\frac { 1 } { 3 } \\right ) ^ { x - 2 }\\]\n\nThink you got it? Get this answer and more practice on our Intelligent Practice Service\n\n17. Solve for the unknown variable:\n3 x -1 -27 =0\nb) 8x -1 2 =0\nc) 27(4$^{x}$) = (64)3 x\n\nm.everythingmaths.co.za"
+  }
+]

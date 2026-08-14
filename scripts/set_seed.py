@@ -13,7 +13,7 @@ def main() -> None:
     random.seed(s)
     np.random.seed(s)
     torch.manual_seed(s)
-    torch.use_deterministic_algorithms(True)
+    torch.use_deterministic_algorithms(True)  # error instead of silently using a non-deterministic op
 
 
 if __name__ == "__main__":

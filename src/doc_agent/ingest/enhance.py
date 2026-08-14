@@ -20,5 +20,6 @@ class Enhancer:
 
 def run(pages: list[Page], cfg: dict) -> list[Page]:
     if not cfg["enhance"]["enabled"]:
+        # no-op path: our corpus is clean/born-digital, enhance.enabled=false in config.yaml
         return pages
     return Enhancer(cfg).apply(pages)

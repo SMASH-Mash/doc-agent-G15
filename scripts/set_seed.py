@@ -1,4 +1,4 @@
-"""Deterministic seeds (reproducibility gate)."""
+"""Deterministic seeds (reproducibility gate). """
 
 import random
 
@@ -13,7 +13,8 @@ def main() -> None:
     random.seed(s)
     np.random.seed(s)
     torch.manual_seed(s)
-    torch.use_deterministic_algorithms(True)  # error instead of silently using a non-deterministic op
+    # error instead of silently using a non-deterministic op
+    torch.use_deterministic_algorithms(True)  
 
 
 if __name__ == "__main__":

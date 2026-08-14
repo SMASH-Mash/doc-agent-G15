@@ -518,3 +518,25 @@ def split(chunks: list[Chunk], cfg: dict) -> list[Chunk]:
 def build_from_manifest(cfg: dict[str, Any]) -> list[Chunk]:
     """Build structure-aware chunks from the existing OCR manifest."""
     return split(load_ocr_chunks(cfg), cfg)
+
+
+def load_chunks(cfg: dict[str, Any]) -> list[Chunk]:
+    """Load the chunk manifest already written by ``split()``, without recomputing anything.
+
+    Lets a later stage (e.g. scripts/run_index.py) rebuild embeddings/index from a prior
+    ingest pass's output, instead of re-running layout/OCR/chunking to get there again."""
+    path = Path(cfg.get("chunk", {}).get("manifest_path", "data/interim/chunks/chunks.jsonl"))
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Chunk manifest does not exist: {path}. Run scripts/run_ingest.py first."
+        )
+    return [
+        Chunk(
+            id=str(row["chunk_id"]),
+            doc_id=str(row["doc_id"]),
+            text=str(row["text"]),
+            page_ids=[str(page_id) for page_id in row.get("page_ids", [])],
+        )
+        for row in _read_jsonl(path)
+        if str(row.get("text", "")).strip()
+    ]

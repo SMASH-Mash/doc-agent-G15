@@ -12,8 +12,7 @@ def main() -> None:
     s = config.load()["seed"]
     random.seed(s)
     np.random.seed(s)
-    torch.manual_seed(s)
-    # error instead of silently using a non-deterministic op
+    torch.manual_seed(s) 
     torch.use_deterministic_algorithms(True)  
 
 

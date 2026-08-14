@@ -16,7 +16,7 @@
   derivation scrambling (aligned `=` steps), multi-column (Siyavula) vs single-column (OpenStax) reading
   order, and diagram/inline-symbol conflation. 16.29% of non-empty lines contain LaTeX-able math
   expressions; 2.19% of pages exceed 50% math-line density (from A1 EDA). This is the "math-notation"
-  data speciality declared in `configs/task.yaml`, driving the math-aware Nougat OCR choice in A2.
+  data speciality declared in `configs/task.yaml`, driving the granite-docling-2stage-258m OCR choice in A2.
 - **Split policy (by document, no leakage):** Train = `siyavula_gr11` + `openstax_calc1` (52.1% of
   words). Test = `siyavula_gr12` + `openstax_calc2` (47.9% of words, fully held out). Validation = a 15%
   stratified subsample of Train chunks only, used for hyperparameter tuning (never reported as a final

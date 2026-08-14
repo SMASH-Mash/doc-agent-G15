@@ -1,7 +1,21 @@
-# Stage 0 — problem statement (one per group). Set by assignment.
-group_id: "G00"
-domain: "almanacs/panjika"
-data_speciality: "degraded-scans"   # ONE hard corpus property (English is not one)
-primary_nfr: "reproducible"
-nfr_target: "p95 latency <= 300ms"   # your concrete committed target
-corpus: {min_pages: 300, min_words: 60000, source_url: "", license: ""}
+# Stage 0 — problem statement (one per group). Carried forward from the team's A1 submission
+# (A1_form.md), which was graded on Moodle before this repo existed (see SUBMISSION.md / handbook
+# 02-How-To-Submit: "2026 cohort ... your first tag is a2-submit ... A2 must also carry forward the
+# A1 artifacts"). Success metric must NOT change from A1 (A2 form Section 1).
+group_id: "G15"
+domain: "High School STEM Education (Advanced High School & Calculus Mathematics)"
+data_speciality: "math-notation"   # Math / Scientific notation: dense LaTeX-able formulas, fractions,
+                                    # multi-line derivations, geometric diagrams; forces a math-aware
+                                    # vision-language OCR pipeline (see A1_form.md Section 1/2).
+primary_nfr: "explainable"
+nfr_target: "Grounded Explanation Faithfulness Score >= 0.90 (LLM-judge step verification) and 100% citation traceability"
+corpus:
+  min_pages: 300
+  min_words: 60000
+  source_url: "https://openstax.org/details/books/calculus-volume-1 ; https://openstax.org/details/books/calculus-volume-2 ; https://www.everythingmaths.co.za (Siyavula Grade 11 & 12 Mathematics) ; fallback mirror: https://drive.google.com/drive/folders/1Znn4PJ7KF4gVIPXjUPS9WbTWONEOBCAr"
+  license: "CC BY (Siyavula Grade 11 & 12 Mathematics) and CC BY-NC-SA 4.0 (OpenStax Calculus Volume 1 & 2)"
+
+# Actual A1 corpus stats (recap, must not change per A2 form Section 1):
+# 4 books, 2,521 pages, 744,092 words, ~398MB on disk.
+# Split by document (no leakage): train = siyavula_gr11 + openstax_calc1 (52.1% of words);
+# test = siyavula_gr12 + openstax_calc2 (47.9% of words, fully held out).

@@ -8,6 +8,7 @@ COPY pyproject.toml requirements.lock ./
 # install` against default PyPI alone can't find it. Safe on a GPU-less deploy target too: it's a
 # CUDA-capable wheel that runs as pure CPU when no GPU is present (torch.cuda.is_available()
 # returns False), same reasoning as pyproject.toml's.
+# One command, split across lines only for readability.
 RUN pip install --no-cache-dir \
     --extra-index-url https://download.pytorch.org/whl/cu121 \
     -r requirements.lock

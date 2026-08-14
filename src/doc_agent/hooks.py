@@ -37,7 +37,7 @@ def register(seam: str, handler: Callable) -> None:
         # Not `assert`: bandit (B101) flags it, and assertions are stripped under `python -O`,
         # which would silently let an unknown seam through. Same pattern as data/validate.py.
         raise AssertionError(f"unknown seam {seam}")
-    _handlers[seam].append(handler)
+    _handlers[seam].append(handler)  # seam is valid -- queue the handler for hooks.run()
 
 
 def run(seam: str, ctx: dict) -> dict:

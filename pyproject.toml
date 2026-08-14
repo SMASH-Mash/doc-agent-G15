@@ -88,10 +88,10 @@ testpaths = ["tests"]
 # "RuntimeError: operator torchvision::nms does not exist" the first time transformers imports
 # NougatProcessor.
 [tool.uv.sources]
-torch = { index = "pytorch-cu121" }
-torchvision = { index = "pytorch-cu121" }
+torch = { index = "pytorch-cu121" }        # pin to the CUDA wheel index, not plain PyPI
+torchvision = { index = "pytorch-cu121" }  # must match torch's index -- see comment block above
 
 [[tool.uv.index]]
 name = "pytorch-cu121"
 url = "https://download.pytorch.org/whl/cu121"
-explicit = true
+explicit = true  # only used by packages that name it explicitly in [tool.uv.sources] above

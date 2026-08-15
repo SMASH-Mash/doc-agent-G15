@@ -15,8 +15,8 @@ each book's page range, so the sample covers early-chapter prose, mid-book
 worked examples and late-chapter exercise sets rather than one content type.
 Pages were chosen for real math-notation density — multi-line derivations,
 stacked fractions, sub/superscript indices, absolute-value and piecewise
-definitions, integral bounds, and several with embedded figures — the exact
-failure modes A1 named and that A2's granite-docling-2stage-258m OCR targets.
+definitions, and integral bounds — the exact failure modes A1 named and that
+A2's granite-docling-2stage-258m OCR targets.
 
 **These pages are never used to tune OCR.** They are not selected by any
 development sampler, and the `sample50` development checkpoint (the first 50
@@ -51,12 +51,10 @@ error analysis in the A2 form Section 5 was done on:
 | File | Why picked |
 |---|---|
 | `openstax_calc1_p0150.png` | Multi-step limit-law derivation (Example 2.15), nested `lim` subscripts, stacked fraction, boxed theorem |
-| `siyavula_gr12_p0080.png` | Inverse-function notation (`h^{-1}`), average-gradient formula (stacked fraction), a plotted figure |
-| `openstax_calc2_p0120.png` | Absolute-value piecewise definition, multi-line definite-integral derivation, bracket-evaluated bounds, two figures |
+| `siyavula_gr12_p0080.png` | Inverse-function notation (`h^{-1}`), average-gradient formula (stacked fraction) |
+| `openstax_calc2_p0120.png` | Absolute-value piecewise definition, multi-line definite-integral derivation, bracket-evaluated bounds |
 
 Ground-truth transcriptions: `../labels.jsonl`, written in the same
 markdown+LaTeX convention granite-docling-2stage-258m itself outputs
 (`\(...\)` inline math, `\[...\]` display math) so OCR output is directly
-diffable against the label without a format-mismatch penalty. Figures are
-described in `[figure: ...]` tags rather than transcribed (OCR skips
-`kind="figure"` regions by design — see `vision/ocr.py::transcribe`).
+diffable against the label without a format-mismatch penalty.

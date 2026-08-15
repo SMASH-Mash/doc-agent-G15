@@ -22,6 +22,9 @@ LOGGER = get_logger(__name__)
 
 _LOCATION_TOKEN_RE = re.compile(r"<loc_\d+>")
 _SPECIAL_TOKEN_RE = re.compile(r"<\|[^>]+\|>")
+# Observed hallucinated code-block-language tags (e.g. "<_SQL_>QUESTION", "<_YAML_>Rule: ...")
+# misfiring at the start of short bold headers. Never legitimate content in this corpus.
+_STRAY_TAG_RE = re.compile(r"<_[A-Za-z]+_>")
 _FORMULA_RE = re.compile(r"<formula>(.*?)</formula>", re.DOTALL | re.IGNORECASE)
 _GENERIC_TAG_RE = re.compile(r"</?[a-zA-Z][a-zA-Z0-9_-]*(?:\s[^>]*)?>")
 _WHITESPACE_RE = re.compile(r"[ \t]+")
@@ -151,6 +154,7 @@ def _normalise_generated_text(text: str, source_label: str) -> tuple[str, list[s
     value = unicodedata.normalize("NFC", html.unescape(text)).strip()
     value = _SPECIAL_TOKEN_RE.sub("", value)
     value = _LOCATION_TOKEN_RE.sub("", value)
+    value = _STRAY_TAG_RE.sub("", value).strip()
 
     if source_label == "formula":
         match = _FORMULA_RE.search(value)

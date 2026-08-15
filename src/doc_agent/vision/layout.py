@@ -80,13 +80,17 @@ def _iou(left: tuple[int, int, int, int], right: tuple[int, int, int, int]) -> f
 
 
 def _deduplicate(candidates: list[_Candidate], threshold: float) -> list[_Candidate]:
-    """Suppress near-identical predictions of the same coarse kind."""
+    """Suppress near-identical predictions, including cross-label duplicates.
+
+    A real, observed failure mode: the same bounding box detected once as ``heading`` and
+    once as ``text`` (or another label pair) survives a same-kind-only comparison and reaches
+    OCR twice, producing duplicate transcribed content. Comparing by geometry alone (not
+    kind + geometry) catches this while still requiring near-identical overlap, so distinct
+    regions that happen to be adjacent (not near-identical) are unaffected.
+    """
     kept: list[_Candidate] = []
     for candidate in sorted(candidates, key=lambda item: item.score, reverse=True):
-        duplicate = any(
-            candidate.kind == previous.kind and _iou(candidate.bbox, previous.bbox) >= threshold
-            for previous in kept
-        )
+        duplicate = any(_iou(candidate.bbox, previous.bbox) >= threshold for previous in kept)
         if not duplicate:
             kept.append(candidate)
     return kept

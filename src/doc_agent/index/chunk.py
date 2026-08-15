@@ -409,7 +409,7 @@ def _split_document(
                 doc_id=doc_id,
                 sequence=sequence,
                 heading=section_heading,
-                heading_units=section_heading_units,
+                heading_units=list(section_heading_units),
                 pieces=current,
                 chunk_cfg=chunk_cfg,
             )

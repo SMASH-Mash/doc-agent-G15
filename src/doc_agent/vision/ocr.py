@@ -409,7 +409,8 @@ class Reader:
         self._layout: dict[tuple[str, tuple[int, ...]], dict[str, Any]] = {}
         for row in layout_rows:
             page_id = str(row["page_id"])
-            bbox = tuple(int(value) for value in row["bbox"])
+            box = [int(value) for value in row["bbox"]]
+            bbox = (box[0], box[1], box[2], box[3])
             self._layout[_bbox_key(page_id, bbox)] = row
 
     def _metadata(self, region: Region) -> _RegionMeta:
@@ -417,7 +418,8 @@ class Reader:
         if page is None:
             raise KeyError(f"No page manifest row for region page_id={region.page_id}")
 
-        bbox = tuple(int(value) for value in region.bbox)
+        box = [int(value) for value in region.bbox]
+        bbox = (box[0], box[1], box[2], box[3])
         layout_row = self._layout.get(_bbox_key(region.page_id, bbox), {})
         width = int(page.get("width", 0))
         height = int(page.get("height", 0))

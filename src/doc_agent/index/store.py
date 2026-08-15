@@ -24,7 +24,7 @@ def _paths(cfg: dict[str, Any]) -> tuple[Path, Path]:
     )
 
 
-def build(chunks, vectors, cfg: dict) -> None:
+def build(chunks: Any, vectors: Any, cfg: dict) -> None:
     """Build and persist the configured FAISS index plus chunk metadata."""
     index_cfg = cfg.get("index", {})
     index_type = str(index_cfg.get("type", "faiss:flat_ip"))
@@ -74,7 +74,7 @@ def build(chunks, vectors, cfg: dict) -> None:
     )
 
 
-def load(cfg: dict):
+def load(cfg: dict) -> Any:
     """Load the persisted FAISS index and its chunk metadata."""
     index_path, metadata_path = _paths(cfg)
 

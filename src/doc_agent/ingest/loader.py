@@ -120,7 +120,7 @@ def _convert_image(
 
     if overwrite or not output_path.exists():
         with Image.open(source_path) as image:
-            image = ImageOps.exif_transpose(image).convert("RGB")
+            image = (ImageOps.exif_transpose(image) or image).convert("RGB")
             image.save(output_path, format="PNG", dpi=(dpi, dpi))
 
     with Image.open(output_path) as image:

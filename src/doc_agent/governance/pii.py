@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from typing import Any
 
 from ..contracts import *  # noqa: F401,F403
 
@@ -66,7 +67,7 @@ def redact(text: str) -> str:
     return result
 
 
-def register(hooks) -> None:
+def register(hooks: Any) -> None:
     """Wire PII redaction into the pipeline hooks."""
 
     def _scrub(ctx: dict) -> dict:

@@ -47,7 +47,7 @@ def _deskew(image: np.ndarray) -> np.ndarray:
 
 
 def _process_image(image: Image.Image, cfg: dict) -> Image.Image:
-    image = ImageOps.exif_transpose(image).convert("RGB")
+    image = (ImageOps.exif_transpose(image) or image).convert("RGB")
     array = np.asarray(image)
 
     if bool(cfg.get("deskew", False)):

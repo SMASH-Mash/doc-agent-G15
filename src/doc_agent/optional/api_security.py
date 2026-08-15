@@ -1,5 +1,6 @@
 """OPTIONAL — API auth + rate limiting
-Activate only if your data speciality or NFR requires it (profiles secure/high-stakes). Off by default; CI does not require impl.
+Activate only if your data speciality or NFR requires it (profiles secure/high-stakes).
+Off by default; CI does not require impl.
 """
 
 from __future__ import annotations

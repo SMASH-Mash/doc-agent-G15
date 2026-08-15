@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ..contracts import *  # noqa
+from ..contracts import Answer, Query
 
 
 def judge(query: Query, answer: Answer) -> float:

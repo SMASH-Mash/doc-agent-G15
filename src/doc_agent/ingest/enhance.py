@@ -1,8 +1,11 @@
-"""Stage 1 — ENHANCEMENT (VAE / diffusion) — generative denoise / super-resolution of degraded scans"""
+"""Stage 1 — ENHANCEMENT (VAE / diffusion).
+
+Generative denoise / super-resolution of degraded scans.
+"""
 
 from __future__ import annotations
 
-from ..contracts import *  # noqa
+from ..contracts import Page
 
 
 class Enhancer:
@@ -20,6 +23,5 @@ class Enhancer:
 
 def run(pages: list[Page], cfg: dict) -> list[Page]:
     if not cfg["enhance"]["enabled"]:
-        # no-op path: our corpus is clean/born-digital, enhance.enabled=false in config.yaml
         return pages
     return Enhancer(cfg).apply(pages)

@@ -12,10 +12,8 @@ from ..contracts import *  # noqa
 class ToolSelectionEnv(gym.Env):
     """State=agent context, Action=tool choice, Reward=task success under budget. IMPLEMENT."""
 
-    def reset(
-        self, *, seed: int | None = None, options: dict[str, Any] | None = None
-    ) -> tuple[Any, dict[str, Any]]:
+    def reset(self, *, seed: int | None = None, options: dict | None = None) -> Any:
         raise NotImplementedError("Stage 7: env.reset")
 
-    def step(self, action: Any) -> tuple[Any, float, bool, bool, dict[str, Any]]:
+    def step(self, action: Any) -> Any:
         raise NotImplementedError("Stage 7: env.step")

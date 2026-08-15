@@ -51,7 +51,10 @@ class ToolResult(BaseModel):
 
 
 class TraceStep(BaseModel):
-    """One agent step, emitted to traces/run.jsonl so the A3 agentic-feature check can read the path."""
+    """One agent step, emitted to traces/run.jsonl.
+
+    The A3 agentic-feature check reads the path from there.
+    """
 
     step: int
     tool: str  # tool name, or "decide" / "answer"
@@ -59,6 +62,8 @@ class TraceStep(BaseModel):
     obs: dict  # what decide() saw, e.g. {"top_score": 0.31, "n": 10}
 
 
-# MANDATORY agentic behaviour (graded in A3): evidence-gated re-search — decide() must re-retrieve with a
-# reformulated query when the top evidence is weak. That runtime branch is what makes the system an agent.
-# (multi-hop -> recall NFR, verify-and-correct -> precision NFR, tool-routing -> bonus; see the codebase guide.)
+# MANDATORY agentic behaviour (graded in A3): evidence-gated re-search — decide()
+# must re-retrieve with a reformulated query when the top evidence is weak. That
+# runtime branch is what makes the system an agent.
+# (multi-hop -> recall NFR, verify-and-correct -> precision NFR, tool-routing ->
+# bonus; see the codebase guide.)

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from ..contracts import *  # noqa
+from typing import Any
+
+from ..contracts import ToolResult
 
 
 def escalate(reason: str, context: dict) -> ToolResult:
@@ -10,6 +12,6 @@ def escalate(reason: str, context: dict) -> ToolResult:
     raise NotImplementedError("HITL: escalate_to_human")
 
 
-def review_queue() -> list[dict]:
+def review_queue() -> Any:
     """Return pending items for the reviewer UI. IMPLEMENT."""
     raise NotImplementedError("HITL: review queue")

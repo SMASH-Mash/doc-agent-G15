@@ -1,93 +1,214 @@
-"""Stage 1 — load scanned page-images"""
+"""Stage 1 — load scanned page-images."""
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from pathlib import Path
+from typing import Any
 
-from ..contracts import *  # noqa
-from ..data.validate import validate
+import pymupdf
+from PIL import Image, ImageOps
 
-DATA_RAW = Path("data/raw")
-MANIFEST_PATH = DATA_RAW / "manifest.jsonl"
+from ..contracts import Page
+from ..logging_conf import get_logger
 
-
-def _split_page_id(page_id: str) -> tuple[str, int]:
-    """page_id scheme: f'{doc_id}_p{page_num:04d}' (doc_ids never contain '_p')."""
-    doc_id, sep, num_part = page_id.rpartition("_p")
-    if not sep:
-        raise ValueError(f"page_id {page_id!r} does not match the '<doc_id>_p<NNNN>' scheme")
-    return doc_id, int(num_part)
+LOGGER = get_logger(__name__)
+SUPPORTED_IMAGE_SUFFIXES = {".bmp", ".jpeg", ".jpg", ".png", ".tif", ".tiff", ".webp"}
+SUPPORTED_SUFFIXES = SUPPORTED_IMAGE_SUFFIXES | {".pdf"}
 
 
-def doc_id_for(page_id: str) -> str:
-    """page_id -> the document/book it belongs to. contracts.Region only carries page_id (fixed
-    contract, no doc_id field), so vision/ocr.py uses this to build Chunk.doc_id."""
-    doc_id, _ = _split_page_id(page_id)
-    return doc_id
+def _slug(value: str) -> str:
+    """Return a deterministic identifier safe for file and page IDs."""
+    cleaned = re.sub(r"[^a-z0-9]+", "_", value.lower()).strip("_")
+    return cleaned or "document"
 
 
-def page_num_for(page_id: str) -> int:
-    """page_id -> its 1-indexed page number within its document (used by vision/layout.py's
-    PyMuPDF fallback to index into the original source PDF)."""
-    _, page_num = _split_page_id(page_id)
-    return page_num
+def _portable_path(path: Path) -> str:
+    """Prefer a repository-relative path while still supporting absolute config paths."""
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(Path.cwd().resolve()).as_posix()
+    except ValueError:
+        return resolved.as_posix()
 
 
-def image_path_for(page_id: str) -> str:
-    """Deterministic page_id -> rasterised PNG path, matching scripts/get_data.sh's on-disk layout
-    (data/raw/<doc_id>/<page_num:04d>.png). contracts.Region only carries page_id + bbox (fixed
-    contract, no image path field), so vision/layout.py and vision/ocr.py both resolve the actual
-    image file through this single shared helper rather than duplicating the naming convention."""
-    doc_id, page_num = _split_page_id(page_id)
-    return str(DATA_RAW / doc_id / f"{page_num:04d}.png")
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
-def _stratified_sample(pages: list[Page], max_pages: int) -> list[Page]:
-    """Even sample across all documents -- bucket-CENTER indices spread across each book, not the
-    first N pages (front matter/title pages, often near-blank -- see preprocess.py's own blank-page
-    drop) so a small dev.max_pages smoke-test run still exercises real content from every book.
-    Bucket-center (not bucket-start) matters specifically when per_doc==1 (max_pages <= n_docs,
-    e.g. our small local default): a bucket-start pick would always land on page 1 of every book;
-    bucket-center picks the middle of the book instead."""
-    if max_pages <= 0 or len(pages) <= max_pages:
-        return pages
-    by_doc: dict[str, list[Page]] = {}
-    for p in pages:
-        by_doc.setdefault(p.doc_id, []).append(p)
-    per_doc = max(1, max_pages // len(by_doc))
-    sampled: list[Page] = []
-    for doc_pages in by_doc.values():
-        n = len(doc_pages)
-        indices = sorted({min(n - 1, int((i + 0.5) * n / per_doc)) for i in range(per_doc)})
-        sampled.extend(doc_pages[i] for i in indices)
-    sampled_ids = {p.id for p in sampled}
-    return [p for p in pages if p.id in sampled_ids][:max_pages]
+def _document_id(path: Path, raw_dir: Path) -> str:
+    """Create a stable document ID from the source's path below data/raw."""
+    try:
+        relative = path.relative_to(raw_dir)
+    except ValueError:
+        relative = Path(path.name)
+    without_suffix = relative.with_suffix("")
+    return _slug("__".join(without_suffix.parts))
+
+
+def _save_manifest(rows: list[dict[str, Any]], manifest_path: Path) -> None:
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with manifest_path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def _render_pdf(
+    source_path: Path,
+    raw_dir: Path,
+    output_dir: Path,
+    dpi: int,
+    overwrite: bool,
+) -> tuple[list[Page], list[dict[str, Any]]]:
+    doc_id = _document_id(source_path, raw_dir)
+    pages: list[Page] = []
+    rows: list[dict[str, Any]] = []
+
+    with pymupdf.open(source_path) as document:
+        if document.page_count == 0:
+            raise ValueError(f"PDF contains no pages: {source_path}")
+
+        for page_index in range(document.page_count):
+            page_number = page_index + 1
+            page_id = f"{doc_id}_p{page_number:04d}"
+            output_path = output_dir / doc_id / f"{page_id}.png"
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+            if overwrite or not output_path.exists():
+                pixmap = document.load_page(page_index).get_pixmap(dpi=dpi, alpha=False)
+                pixmap.save(output_path)
+
+            with Image.open(output_path) as image:
+                width, height = image.size
+
+            portable_output = _portable_path(output_path)
+            pages.append(Page(id=page_id, image_path=portable_output, doc_id=doc_id))
+            rows.append(
+                {
+                    "doc_id": doc_id,
+                    "page_id": page_id,
+                    "source_path": _portable_path(source_path),
+                    "source_page": page_number,
+                    "image_path": portable_output,
+                    "width": width,
+                    "height": height,
+                    "dpi": dpi,
+                    "sha256": _sha256(output_path),
+                }
+            )
+
+    return pages, rows
+
+
+def _convert_image(
+    source_path: Path,
+    raw_dir: Path,
+    output_dir: Path,
+    dpi: int,
+    overwrite: bool,
+) -> tuple[Page, dict[str, Any]]:
+    doc_id = _document_id(source_path, raw_dir)
+    page_id = f"{doc_id}_p0001"
+    output_path = output_dir / doc_id / f"{page_id}.png"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    if overwrite or not output_path.exists():
+        with Image.open(source_path) as image:
+            image = (ImageOps.exif_transpose(image) or image).convert("RGB")
+            image.save(output_path, format="PNG", dpi=(dpi, dpi))
+
+    with Image.open(output_path) as image:
+        width, height = image.size
+
+    portable_output = _portable_path(output_path)
+    page = Page(id=page_id, image_path=portable_output, doc_id=doc_id)
+    row = {
+        "doc_id": doc_id,
+        "page_id": page_id,
+        "source_path": _portable_path(source_path),
+        "source_page": 1,
+        "image_path": portable_output,
+        "width": width,
+        "height": height,
+        "dpi": dpi,
+        "sha256": _sha256(output_path),
+    }
+    return page, row
 
 
 def load_pages(cfg: dict) -> list[Page]:
-    """Read data/raw/manifest.jsonl (written by scripts/get_data.sh) -> list[Page]. Validates the
-    FULL downloaded corpus against the >=300 pages / >=60k words floor before applying
-    cfg['dev']['max_pages'] dev-mode sampling, so the floor check always reflects the real corpus,
-    not a small test-mode subset (0 = no limit = the full corpus, the actual A2 deliverable run)."""
-    if not MANIFEST_PATH.exists():
-        raise FileNotFoundError(
-            f"{MANIFEST_PATH} not found -- run `bash scripts/get_data.sh` first to fetch the corpus."
-        )
-    records = [
-        json.loads(line)
-        for line in MANIFEST_PATH.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
-    all_pages = [
-        Page(
-            id=f"{r['book_id']}_p{r['page_num']:04d}",
-            image_path=r["image_path"],
-            doc_id=r["book_id"],
-        )
-        for r in records
-    ]
-    validate(all_pages)
+    """Rasterise PDFs and normalise image files into deterministic ``Page`` objects.
 
-    max_pages = cfg.get("dev", {}).get("max_pages", 0)
-    return _stratified_sample(all_pages, max_pages)
+    Configuration is read from ``cfg['ingest']``. The defaults are deliberately safe for
+    the ATLAS corpus: 300-dpi RGB pages, recursive discovery below ``data/raw``, and a JSONL
+    manifest containing one row per generated page.
+    """
+    ingest_cfg = cfg.get("ingest", {})
+    raw_dir = Path(ingest_cfg.get("raw_dir", "data/raw"))
+    output_dir = Path(ingest_cfg.get("pages_dir", "data/interim/pages"))
+    manifest_path = Path(ingest_cfg.get("manifest_path", "data/interim/pages.jsonl"))
+    dpi = int(ingest_cfg.get("dpi", 300))
+    overwrite = bool(ingest_cfg.get("overwrite", False))
+
+    if dpi < 72:
+        raise ValueError(f"ingest.dpi must be at least 72, got {dpi}")
+    if not raw_dir.exists():
+        raise FileNotFoundError(
+            f"Corpus directory does not exist: {raw_dir}. Run scripts/get_data.sh first."
+        )
+
+    source_paths = sorted(
+        path
+        for path in raw_dir.rglob("*")
+        if path.is_file() and path.suffix.lower() in SUPPORTED_SUFFIXES
+    )
+    if not source_paths:
+        supported = ", ".join(sorted(SUPPORTED_SUFFIXES))
+        raise FileNotFoundError(
+            f"No supported corpus files found below {raw_dir}. Supported: {supported}"
+        )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    pages: list[Page] = []
+    manifest_rows: list[dict[str, Any]] = []
+
+    for source_path in source_paths:
+        if source_path.suffix.lower() == ".pdf":
+            source_pages, rows = _render_pdf(
+                source_path=source_path,
+                raw_dir=raw_dir,
+                output_dir=output_dir,
+                dpi=dpi,
+                overwrite=overwrite,
+            )
+            pages.extend(source_pages)
+            manifest_rows.extend(rows)
+        else:
+            page, row = _convert_image(
+                source_path=source_path,
+                raw_dir=raw_dir,
+                output_dir=output_dir,
+                dpi=dpi,
+                overwrite=overwrite,
+            )
+            pages.append(page)
+            manifest_rows.append(row)
+
+    page_ids = [page.id for page in pages]
+    if len(page_ids) != len(set(page_ids)):
+        raise ValueError("Generated duplicate page IDs; check for colliding corpus filenames")
+
+    _save_manifest(manifest_rows, manifest_path)
+    LOGGER.info(
+        "ingest_complete pages=%d documents=%d manifest=%s",
+        len(pages),
+        len({page.doc_id for page in pages}),
+        manifest_path,
+    )
+    return pages

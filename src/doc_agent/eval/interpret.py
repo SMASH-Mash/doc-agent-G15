@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ..contracts import *  # noqa
+from ..contracts import Answer
 
 
 def explain(answer: Answer, cfg: dict) -> dict:

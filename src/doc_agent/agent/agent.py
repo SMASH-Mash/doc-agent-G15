@@ -7,7 +7,7 @@ from __future__ import annotations
 from typing import Any
 
 from .. import hooks
-from ..contracts import *  # noqa
+from ..contracts import Answer, ToolResult
 from .memory import Memory
 
 
@@ -37,13 +37,15 @@ class Agent:
 
     def decide(self, state: dict) -> dict:
         """Evidence-gated re-search — the MANDATORY agentic behaviour (A3 gate, fail-closed).
-        Read the last observation (top_score, k) and branch on the NUMBER, using retrieval.retriever:
+        Read the last observation (top_score, k) and branch on the NUMBER, using
+        retrieval.retriever:
           1. retrieve at k = cfg.retrieve.k
           2. if is_weak(chunks, cfg):  k2 = next_k(k, cfg)
                - k2 is not None -> retrieve AGAIN at the wider k2 (widen the net), then re-check
                - k2 is None (hit k_max) and still weak -> ABSTAIN ("insufficient evidence")
           3. else -> synthesize a grounded, cited answer
-        Emit obs {"top_score": ..., "k": ...} on each step. A fixed retrieve->answer path is NOT agentic
+        Emit obs {"top_score": ..., "k": ...} on each step. A fixed retrieve->answer
+        path is NOT agentic
         and caps the grade. Rule-based (baseline) or RL policy (Stage 7)."""
         raise NotImplementedError("Stage 6: agent policy")
 

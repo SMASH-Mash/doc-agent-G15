@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from ..contracts import *  # noqa
+from typing import Any
+
+from ..contracts import Answer
 
 
 def ocr_f1(pred: str, gold: str) -> float:
@@ -21,7 +23,7 @@ def citation_accuracy(answer: Answer) -> float:
     raise NotImplementedError
 
 
-def ece(confidences: list[float], correct: list[bool]) -> float:
+def ece(confidences: Any, correct: Any) -> float:
     raise NotImplementedError  # calibration
 
 

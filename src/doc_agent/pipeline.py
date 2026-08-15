@@ -3,9 +3,10 @@ Do not reorder stages or remove hooks.run()/register_all() calls."""
 
 from __future__ import annotations
 
+from typing import Any
+
 from . import config, hooks, wiring  # noqa: F401
 from .agent import agent
-from .contracts import Answer
 from .index import chunk, embed, store
 from .ingest import enhance, loader, preprocess
 from .retrieval import retriever
@@ -27,7 +28,7 @@ def build_knowledge_base(cfg: dict) -> None:
     store.build(chunks, vectors, cfg)
 
 
-def answer(query_text: str, cfg: dict) -> Answer:
+def answer(query_text: str, cfg: dict) -> Any:
     wiring.register_all(cfg)
     r = retriever.Retriever(cfg)  # Stage 5
     return agent.Agent(cfg, r).run(query_text)  # Stage 6 (seams run inside the loop)

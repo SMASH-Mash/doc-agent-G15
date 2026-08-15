@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import lightning as L
+import lightning as L  # noqa: N812
 
 from ..contracts import *  # noqa
 

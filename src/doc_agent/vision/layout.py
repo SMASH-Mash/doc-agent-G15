@@ -1,221 +1,386 @@
-"""Stage 2 — layout detection / segmentation"""
+"""Stage 2 — document layout detection and deterministic reading order."""
 
 from __future__ import annotations
 
+import json
+from collections.abc import Iterable
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import pymupdf
+from PIL import Image, ImageDraw
 
-from ..contracts import *  # noqa
-from ..ingest.loader import page_num_for
+from ..contracts import Page, Region
 from ..logging_conf import get_logger
 
-logger = get_logger(__name__)
+LOGGER = get_logger(__name__)
 
-# ---------------------------------------------------------------------------
-# Primary backend: DocLayout-YOLO (pretrained doc-layout model, pip extra "layout-yolo"). Its
-# transitive dep chain (albumentations -> albucore -> stringzilla) has no prebuilt wheel for
-# Windows+cp311, requiring an MSVC toolchain to build from source -- Linux (CI, Kaggle) is
-# unaffected and installs it cleanly. When the extra isn't installed, detect() below falls back to
-# a classical PyMuPDF detector that reads the ORIGINAL born-digital PDF's own structure (text
-# blocks, embedded images, native table finder) instead of image-based CV heuristics on a flat
-# rasterised PNG -- justified the same way A1 justified skipping scan enhancement: our corpus is
-# clean and born-digital, so its own structure is ground truth, not something to be inferred.
-# ---------------------------------------------------------------------------
-
-_yolo_model: Any = None
-_yolo_unavailable = False
-
-_DOCSTRUCTBENCH_CLASS_MAP = {
-    "title": "heading",
-    "plain text": "text",
-    "text": "text",
-    "abandon": "text",
-    "figure": "figure",
-    "figure_caption": "text",
+# The fixed Region contract exposes four coarse kinds. Heron's richer labels are
+# intentionally collapsed here while preserving formula regions as OCR-able text.
+_LABEL_TO_KIND = {
+    "caption": "text",
+    "footnote": "text",
+    "formula": "text",
+    "list_item": "text",
+    "page_footer": "text",
+    "page_header": "text",
+    "picture": "figure",
+    "section_header": "heading",
     "table": "table",
-    "table_caption": "text",
-    "table_footnote": "text",
-    "isolate_formula": "text",
-    "formula_caption": "text",
+    "text": "text",
+    "title": "heading",
+    "document_index": "text",
+    "code": "text",
+    "checkbox_selected": "text",
+    "checkbox_unselected": "text",
+    "form": "text",
+    "key_value_region": "text",
 }
 
 
-def _load_yolo(cfg: dict) -> Any:
-    global _yolo_model, _yolo_unavailable
-    if _yolo_model is not None or _yolo_unavailable:
-        return _yolo_model
-    try:
-        from doclayout_yolo import YOLOv10  # type: ignore[import-not-found]
-        from huggingface_hub import hf_hub_download
+@dataclass(frozen=True)
+class _Candidate:
+    page_id: str
+    bbox: tuple[int, int, int, int]
+    kind: str
+    label: str
+    score: float
 
-        weights = hf_hub_download(
-            repo_id=cfg["layout"]["model"],
-            filename="doclayout_yolo_docstructbench_imgsz1024.pt",
-            revision=cfg["layout"].get("revision"),
+
+def _normalise_label(value: str) -> str:
+    return value.strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def _clamp_box(box: Iterable[float], width: int, height: int) -> tuple[int, int, int, int]:
+    values = list(box)
+    if len(values) != 4:
+        raise ValueError(f"Expected four box coordinates, got {values!r}")
+
+    x1, y1, x2, y2 = (int(round(value)) for value in values)
+    x1 = max(0, min(x1, width))
+    x2 = max(0, min(x2, width))
+    y1 = max(0, min(y1, height))
+    y2 = max(0, min(y2, height))
+    if x2 <= x1 or y2 <= y1:
+        raise ValueError(f"Degenerate bounding box after clamping: {(x1, y1, x2, y2)}")
+    return x1, y1, x2, y2
+
+
+def _iou(left: tuple[int, int, int, int], right: tuple[int, int, int, int]) -> float:
+    lx1, ly1, lx2, ly2 = left
+    rx1, ry1, rx2, ry2 = right
+    ix1, iy1 = max(lx1, rx1), max(ly1, ry1)
+    ix2, iy2 = min(lx2, rx2), min(ly2, ry2)
+    intersection = max(0, ix2 - ix1) * max(0, iy2 - iy1)
+    if intersection == 0:
+        return 0.0
+    left_area = (lx2 - lx1) * (ly2 - ly1)
+    right_area = (rx2 - rx1) * (ry2 - ry1)
+    return intersection / float(left_area + right_area - intersection)
+
+
+def _deduplicate(candidates: list[_Candidate], threshold: float) -> list[_Candidate]:
+    """Suppress near-identical predictions, including cross-label duplicates.
+
+    A real, observed failure mode: the same bounding box detected once as ``heading`` and
+    once as ``text`` (or another label pair) survives a same-kind-only comparison and reaches
+    OCR twice, producing duplicate transcribed content. Comparing by geometry alone (not
+    kind + geometry) catches this while still requiring near-identical overlap, so distinct
+    regions that happen to be adjacent (not near-identical) are unaffected.
+    """
+    kept: list[_Candidate] = []
+    for candidate in sorted(candidates, key=lambda item: item.score, reverse=True):
+        duplicate = any(_iou(candidate.bbox, previous.bbox) >= threshold for previous in kept)
+        if not duplicate:
+            kept.append(candidate)
+    return kept
+
+
+def _best_whitespace_cut(
+    candidates: list[_Candidate],
+    *,
+    axis: str,
+    page_extent: int,
+    minimum_gap_ratio: float,
+) -> tuple[float, list[_Candidate], list[_Candidate]] | None:
+    """Return the strongest whitespace cut on one axis.
+
+    A cut is valid only when no region crosses the empty strip. Projected intervals
+    are merged first, so nested formula/text boxes do not create false cuts.
+    """
+    if len(candidates) < 2:
+        return None
+
+    if axis == "x":
+        start_index, end_index = 0, 2
+    elif axis == "y":
+        start_index, end_index = 1, 3
+    else:  # pragma: no cover - internal misuse guard
+        raise ValueError(f"Unsupported reading-order axis: {axis}")
+
+    intervals = sorted(
+        [(item.bbox[start_index], item.bbox[end_index], item) for item in candidates],
+        key=lambda value: (value[0], value[1], value[2].bbox, value[2].label),
+    )
+    components: list[tuple[int, int, list[_Candidate]]] = []
+    for interval_start, interval_end, item in intervals:
+        if components and interval_start <= components[-1][1]:
+            current_start, current_end, current_items = components[-1]
+            current_items.append(item)
+            components[-1] = (current_start, max(current_end, interval_end), current_items)
+        else:
+            components.append((interval_start, interval_end, [item]))
+
+    minimum_gap = max(1.0, page_extent * minimum_gap_ratio)
+    best: tuple[float, list[_Candidate], list[_Candidate]] | None = None
+    for component_index in range(len(components) - 1):
+        gap = components[component_index + 1][0] - components[component_index][1]
+        if gap < minimum_gap:
+            continue
+
+        first = [item for component in components[: component_index + 1] for item in component[2]]
+        second = [item for component in components[component_index + 1 :] for item in component[2]]
+        if not first or not second:
+            continue
+
+        normalised_gap = gap / max(page_extent, 1)
+        if best is None or normalised_gap > best[0]:
+            best = (normalised_gap, first, second)
+
+    return best
+
+
+def _reading_order(
+    candidates: list[_Candidate], page_width: int, page_height: int
+) -> list[_Candidate]:
+    """Order regions using recursive XY-cut whitespace segmentation.
+
+    The recursion first separates blocks at genuine horizontal or vertical whitespace,
+    then reads top-to-bottom or left-to-right respectively. This handles pages that
+    switch between full-width prose and local two-column exercises more reliably than
+    one page-wide column split.
+    """
+    if len(candidates) <= 1:
+        return list(candidates)
+
+    horizontal = _best_whitespace_cut(
+        candidates,
+        axis="y",
+        page_extent=page_height,
+        minimum_gap_ratio=0.012,
+    )
+    vertical = _best_whitespace_cut(
+        candidates,
+        axis="x",
+        page_extent=page_width,
+        minimum_gap_ratio=0.06,
+    )
+
+    chosen: tuple[float, list[_Candidate], list[_Candidate]] | None
+    if horizontal is None:
+        chosen = vertical
+    elif vertical is None:
+        chosen = horizontal
+    else:
+        # Compare normalised whitespace. Horizontal cuts naturally isolate full-width
+        # headings; vertical cuts win inside a true multi-column subsection.
+        chosen = horizontal if horizontal[0] > vertical[0] else vertical
+
+    if chosen is None:
+        return sorted(
+            candidates,
+            key=lambda item: (
+                item.bbox[1],
+                item.bbox[0],
+                item.bbox[3],
+                item.bbox[2],
+                item.label,
+            ),
         )
-        _yolo_model = YOLOv10(weights)
-        logger.info(f"layout: loaded DocLayout-YOLO from {cfg['layout']['model']}")
-    except Exception as exc:  # noqa: BLE001 -- any load failure -> classical fallback, not a crash
-        logger.info(
-            f"layout: doclayout-yolo unavailable ({exc!r}); using PyMuPDF fallback detector"
-        )
-        _yolo_unavailable = True
-        _yolo_model = None
-    return _yolo_model
 
-
-def _yolo_device() -> str:
-    """Mirrors ocr.Reader / index.embed's auto-detect -- was hardcoded to 'cpu' here, which meant
-    layout detection alone stayed off the GPU even once a CUDA-enabled torch build made every
-    other stage use it."""
-    import torch
-
-    return "cuda" if torch.cuda.is_available() else "cpu"
-
-
-def _detect_with_yolo(model: Any, page: Page, cfg: dict) -> list[Region]:
-    result = model.predict(
-        page.image_path,
-        imgsz=1024,
-        conf=cfg["layout"]["score_thr"],
-        device=_yolo_device(),
-        verbose=False,
-    )[0]
-    names = result.names
-    regions = []
-    for box in result.boxes:
-        cls_name = names[int(box.cls[0])].lower()
-        kind = _DOCSTRUCTBENCH_CLASS_MAP.get(cls_name, "text")
-        x0, y0, x1, y1 = (int(v) for v in box.xyxy[0].tolist())
-        regions.append(Region(page_id=page.id, bbox=(x0, y0, x1, y1), kind=kind))
-    return regions
-
-
-# ---------------------------------------------------------------------------
-# Classical fallback (also the primary path on this dev machine)
-# ---------------------------------------------------------------------------
-
-_PDF_SCALE = 300 / 72.0  # matches scripts/get_data.sh's rasterisation DPI (page points -> px)
-_HEADING_FONT_PT = 13.0  # body text in these books is ~10-11pt; headings/theorem titles run larger
-_MERGE_GAP_PT = 11.0  # merge two same-column text blocks into one region if closer than ~1 line
-_COLUMN_BUCKET_PT = 60.0  # coarse left-edge bucket width for column grouping (keeps Siyavula's
-# multi-column exercise sets from merging across columns, per A1's own reading-order finding)
-_source_pdf_cache: dict[str, pymupdf.Document] = {}
-
-
-def _open_source_pdf(doc_id: str) -> pymupdf.Document:
-    if doc_id not in _source_pdf_cache:
-        path = Path("data/raw/_source_pdfs") / f"{doc_id}.pdf"
-        _source_pdf_cache[doc_id] = pymupdf.open(path)
-    return _source_pdf_cache[doc_id]
-
-
-def _scale_rect(rect: tuple[float, float, float, float]) -> tuple[int, int, int, int]:
-    x0, y0, x1, y1 = rect
-    return (
-        int(x0 * _PDF_SCALE),
-        int(y0 * _PDF_SCALE),
-        int(x1 * _PDF_SCALE),
-        int(y1 * _PDF_SCALE),
+    _, first, second = chosen
+    return _reading_order(first, page_width, page_height) + _reading_order(
+        second, page_width, page_height
     )
 
 
-def _center_in_any(bbox: tuple[float, float, float, float], rects: list[Any]) -> bool:
-    cx, cy = (bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2
-    return any(r[0] <= cx <= r[2] and r[1] <= cy <= r[3] for r in rects)
+def _resolve_device(requested: str, torch_module: Any) -> str:
+    if requested.startswith("cuda") and not torch_module.cuda.is_available():
+        LOGGER.warning("layout_cuda_unavailable requested=%s fallback=cpu", requested)
+        return "cpu"
+    return requested
 
 
-def _merge_text_blocks(
-    blocks: list[tuple[tuple[float, float, float, float], str]],
-) -> list[tuple[tuple[float, float, float, float], str]]:
-    """PyMuPDF's 'dict' blocks split text far more finely than a paragraph (often per short
-    line-group) -- Nougat is a page/paragraph-scale VLM, so OCR-ing hundreds of tiny slivers per
-    page both wastes calls and starves it of the surrounding context it needs to reconstruct a
-    multi-line derivation correctly (A1's own named failure mode). This merges vertically-adjacent
-    blocks of the same kind back into paragraph/section-scale regions, grouped into coarse column
-    buckets first so Siyavula's multi-column exercise sets don't get merged across columns."""
-    by_col: dict[int, list[tuple[tuple[float, float, float, float], str]]] = {}
-    for bbox, kind in blocks:
-        col = round(bbox[0] / _COLUMN_BUCKET_PT)
-        by_col.setdefault(col, []).append((bbox, kind))
+def _load_backend(layout_cfg: dict[str, Any], requested_device: str) -> tuple[Any, Any, Any, str]:
+    """Load Heron lazily so import-time tests never download model weights."""
+    try:
+        import torch
+        from transformers import RTDetrImageProcessor, RTDetrV2ForObjectDetection
+    except ImportError as exc:  # pragma: no cover - exercised only in broken environments
+        raise RuntimeError(
+            "Layout dependencies are missing. Activate .venv and run "
+            '`python -m pip install -e ".[dev]"`.'
+        ) from exc
 
-    merged: list[tuple[tuple[float, float, float, float], str]] = []
-    for col_blocks in by_col.values():
-        col_blocks.sort(key=lambda b: b[0][1])  # top-to-bottom within the column
-        cur: list[float] | None = None
-        cur_kind = "text"
-        for bbox, kind in col_blocks:
-            if cur is not None and kind == cur_kind and bbox[1] - cur[3] <= _MERGE_GAP_PT:
-                cur[0], cur[1] = min(cur[0], bbox[0]), min(cur[1], bbox[1])
-                cur[2], cur[3] = max(cur[2], bbox[2]), max(cur[3], bbox[3])
-            else:
-                if cur is not None:
-                    merged.append(((cur[0], cur[1], cur[2], cur[3]), cur_kind))
-                cur, cur_kind = list(bbox), kind
-        if cur is not None:
-            merged.append(((cur[0], cur[1], cur[2], cur[3]), cur_kind))
-    return merged
+    model_name = str(layout_cfg.get("model", "docling-project/docling-layout-heron"))
+    revision = layout_cfg.get("revision")
+    local_files_only = bool(layout_cfg.get("local_files_only", False))
+    kwargs: dict[str, Any] = {"local_files_only": local_files_only}
+    if revision:
+        kwargs["revision"] = revision
+
+    processor = RTDetrImageProcessor.from_pretrained(model_name, **kwargs)
+    model = RTDetrV2ForObjectDetection.from_pretrained(model_name, **kwargs)
+    device = _resolve_device(requested_device, torch)
+    model.to(device)
+    model.eval()
+    return processor, model, torch, device
 
 
-def _detect_with_pymupdf(page: Page, cfg: dict) -> list[Region]:
-    doc = _open_source_pdf(page.doc_id)
-    pdf_page = doc[page_num_for(page.id) - 1]
-    regions: list[Region] = []
+def _predict_batch(
+    images: list[Image.Image],
+    processor: Any,
+    model: Any,
+    torch_module: Any,
+    device: str,
+    threshold: float,
+) -> list[dict[str, Any]]:
+    inputs = processor(images=images, return_tensors="pt")
+    inputs = {name: tensor.to(device) for name, tensor in inputs.items()}
+    with torch_module.inference_mode():
+        outputs = model(**inputs)
 
-    table_rects = [tuple(t.bbox) for t in pdf_page.find_tables().tables]
-    for rect in table_rects:
-        regions.append(Region(page_id=page.id, bbox=_scale_rect(rect), kind="table"))
+    target_sizes = torch_module.tensor([image.size[::-1] for image in images])
+    return processor.post_process_object_detection(
+        outputs,
+        target_sizes=target_sizes,
+        threshold=threshold,
+    )
 
-    raw_blocks: list[tuple[tuple[float, float, float, float], str]] = []
-    for block in pdf_page.get_text("dict")["blocks"]:
-        if block.get("type") != 0:  # 0 = text block (1 = image block, handled below)
-            continue
-        bbox = tuple(block["bbox"])
-        if bbox[2] <= bbox[0] or bbox[3] <= bbox[1] or _center_in_any(bbox, table_rects):
-            continue
-        sizes = [span["size"] for line in block["lines"] for span in line["spans"]]
-        avg_size = sum(sizes) / len(sizes) if sizes else 0.0
-        kind = "heading" if avg_size >= _HEADING_FONT_PT else "text"
-        raw_blocks.append((bbox, kind))
 
-    for bbox, kind in _merge_text_blocks(raw_blocks):
-        regions.append(Region(page_id=page.id, bbox=_scale_rect(bbox), kind=kind))
+def _write_outputs(
+    pages: list[Page],
+    candidates_by_page: dict[str, list[_Candidate]],
+    layout_cfg: dict[str, Any],
+) -> None:
+    output_path = Path(layout_cfg.get("manifest_path", "data/interim/layout/regions.jsonl"))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    page_lookup = {page.id: page for page in pages}
 
-    seen_image_rects: set[tuple[int, int, int, int]] = set()
-    for img in pdf_page.get_images(full=True):
-        for rect in pdf_page.get_image_rects(img[0]):
-            scaled = _scale_rect(tuple(rect))
-            if scaled not in seen_image_rects:
-                seen_image_rects.add(scaled)
-                regions.append(Region(page_id=page.id, bbox=scaled, kind="figure"))
+    with output_path.open("w", encoding="utf-8") as handle:
+        for page in pages:
+            for order, candidate in enumerate(candidates_by_page.get(page.id, [])):
+                row = {
+                    "page_id": candidate.page_id,
+                    "order": order,
+                    "bbox": list(candidate.bbox),
+                    "kind": candidate.kind,
+                    "source_label": candidate.label,
+                    "score": round(candidate.score, 6),
+                }
+                handle.write(json.dumps(row, sort_keys=True) + "\n")
 
-    if not regions:
-        # guarantee every page yields >=1 region: whole-page text fallback
-        w, h = pdf_page.rect.width, pdf_page.rect.height
-        regions.append(Region(page_id=page.id, bbox=_scale_rect((0, 0, w, h)), kind="text"))
-    return regions
+    if not bool(layout_cfg.get("save_debug", False)):
+        return
+
+    debug_dir = Path(layout_cfg.get("debug_dir", "data/interim/layout/debug"))
+    for page_id, candidates in candidates_by_page.items():
+        page = page_lookup[page_id]
+        with Image.open(page.image_path) as source:
+            image = source.convert("RGB")
+        draw = ImageDraw.Draw(image)
+        for order, candidate in enumerate(candidates):
+            draw.rectangle(candidate.bbox, outline="red", width=3)
+            draw.text((candidate.bbox[0] + 3, candidate.bbox[1] + 3), f"{order}:{candidate.kind}")
+        target = debug_dir / page.doc_id / f"{page_id}.jpg"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        image.save(target, quality=88)
 
 
 def detect(pages: list[Page], cfg: dict) -> list[Region]:
-    """Detect text/table/figure/heading regions per page. Uses DocLayout-YOLO when the
-    'layout-yolo' extra is installed (the genuinely-reproduced pretrained method), otherwise a
-    deterministic PyMuPDF structural detector over the original source PDF (see module docstring).
-    Every page is guaranteed >=1 region so no page is silently dropped before OCR."""
-    model = _load_yolo(cfg)
-    regions: list[Region] = []
-    for page in pages:
-        page_regions = (
-            _detect_with_yolo(model, page, cfg)
-            if model is not None
-            else _detect_with_pymupdf(page, cfg)
-        )
-        if not page_regions:
-            page_regions = [Region(page_id=page.id, bbox=(0, 0, 0, 0), kind="text")]
-        regions.extend(page_regions)
-    kinds: dict[str, int] = {"text": 0, "table": 0, "figure": 0, "heading": 0}
-    for r in regions:
-        kinds[r.kind] = kinds.get(r.kind, 0) + 1
-    logger.info(f"layout.detect: {len(regions)} regions over {len(pages)} pages ({kinds})")
+    """Detect text, table, figure, and heading regions with Docling Heron.
+
+    The pretrained model is loaded only when this function is called. Predictions are
+    clamped to page bounds, filtered, deduplicated, converted to the fixed Region kinds,
+    and written in deterministic reading order.
+    """
+    if not pages:
+        return []
+
+    layout_cfg = cfg.get("layout", {})
+    threshold = float(layout_cfg.get("score_threshold", layout_cfg.get("score_thr", 0.60)))
+    dedupe_iou = float(layout_cfg.get("dedupe_iou", 0.85))
+    batch_size = int(layout_cfg.get("batch_size", 1))
+    ignored_labels = {
+        _normalise_label(value)
+        for value in layout_cfg.get("ignored_labels", ["page_header", "page_footer"])
+    }
+
+    if not 0.0 <= threshold <= 1.0:
+        raise ValueError(f"layout.score_threshold must be in [0, 1], got {threshold}")
+    if not 0.0 <= dedupe_iou <= 1.0:
+        raise ValueError(f"layout.dedupe_iou must be in [0, 1], got {dedupe_iou}")
+    if batch_size < 1:
+        raise ValueError(f"layout.batch_size must be at least 1, got {batch_size}")
+
+    requested_device = str(layout_cfg.get("device", cfg.get("device", "cpu")))
+    processor, model, torch_module, device = _load_backend(layout_cfg, requested_device)
+    candidates_by_page: dict[str, list[_Candidate]] = {}
+
+    for start in range(0, len(pages), batch_size):
+        batch_pages = pages[start : start + batch_size]
+        images: list[Image.Image] = []
+        for page in batch_pages:
+            path = Path(page.image_path)
+            if not path.exists():
+                raise FileNotFoundError(f"Page image is missing: {path}")
+            with Image.open(path) as source:
+                images.append(source.convert("RGB"))
+
+        results = _predict_batch(images, processor, model, torch_module, device, threshold)
+        for page, image, result in zip(batch_pages, images, results, strict=True):
+            page_candidates: list[_Candidate] = []
+            id2label = getattr(model.config, "id2label", {})
+            for score, label_id, box in zip(
+                result["scores"], result["labels"], result["boxes"], strict=True
+            ):
+                raw_label = str(id2label.get(int(label_id.item()), int(label_id.item())))
+                label = _normalise_label(raw_label)
+                if label in ignored_labels:
+                    continue
+                kind = _LABEL_TO_KIND.get(label)
+                if kind is None:
+                    LOGGER.warning("layout_unknown_label label=%s page_id=%s", label, page.id)
+                    continue
+                try:
+                    bbox = _clamp_box(box.tolist(), image.width, image.height)
+                except ValueError:
+                    LOGGER.warning("layout_invalid_box page_id=%s label=%s", page.id, label)
+                    continue
+                page_candidates.append(
+                    _Candidate(
+                        page_id=page.id,
+                        bbox=bbox,
+                        kind=kind,
+                        label=label,
+                        score=float(score.item()),
+                    )
+                )
+
+            page_candidates = _deduplicate(page_candidates, dedupe_iou)
+            candidates_by_page[page.id] = _reading_order(page_candidates, image.width, image.height)
+
+    _write_outputs(pages, candidates_by_page, layout_cfg)
+    regions = [
+        Region(page_id=item.page_id, bbox=item.bbox, kind=item.kind)
+        for page in pages
+        for item in candidates_by_page.get(page.id, [])
+    ]
+    LOGGER.info(
+        "layout_complete pages=%d regions=%d model=%s device=%s",
+        len(pages),
+        len(regions),
+        layout_cfg.get("model", "docling-project/docling-layout-heron"),
+        device,
+    )
     return regions

@@ -12,8 +12,6 @@ def get_logger(name: str) -> logging.Logger:
     if not lg.handlers:
         h = logging.StreamHandler(sys.stdout)
         h.setFormatter(
-            # One JSON object per line -- machine-parseable, supports the auditable NFR (a log
-            # line can be grep'd or loaded without a custom parser).
             logging.Formatter(
                 '{"ts":"%(asctime)s","lvl":"%(levelname)s","mod":"%(name)s","msg":"%(message)s"}'
             )

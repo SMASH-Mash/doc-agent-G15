@@ -1,74 +1,108 @@
-"""Governance — PII detection + redaction (mandatory)"""
+"""Governance — PII detection + redaction (mandatory)."""
 
 from __future__ import annotations
 
 import re
 from typing import Any
 
-from ..contracts import *  # noqa
-from ..logging_conf import get_logger
+from ..contracts import *  # noqa: F401,F403
 
-logger = get_logger(__name__)
+_EMAIL_RE = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b")
 
-_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
-_ID_NUMBER_RE = re.compile(r"\b\d{6}[-\s]?\d{4}[-\s]?\d{3}\b")  # e.g. SA 13-digit ID numbers
-_PHONE_RE = re.compile(r"\b(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}\b")
+_SSN_RE = re.compile(r"(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)")
 
-# Order matters: match the more specific/structured patterns (email, ID number) before the loose
-# phone-number pattern, which would otherwise also match parts of them.
-_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (_EMAIL_RE, "email"),
-    (_ID_NUMBER_RE, "id_number"),
-    (_PHONE_RE, "phone"),
-]
+# Conservative phone-number pattern. Requires separators so that ordinary
+# mathematical numbers, years, page numbers, etc. are not treated as PII.
+_PHONE_RE = re.compile(
+    r"(?<!\d)" r"(?:\+?\d{1,3}[-.\s])?" r"(?:\(?\d{2,4}\)?[-.\s])" r"\d{3,4}[-.\s]\d{3,4}" r"(?!\d)"
+)
 
 
 def detect(text: str) -> list[tuple[int, int, str]]:
-    """Return (start, end, type) PII spans. Our corpus is a math textbook -- A1's own risk analysis
-    found PII risk 'low but not zero' (invented word-problem names like 'Thabo buys 3 apples', real
-    author names confined to front matter, which is excluded from the retrievable corpus entirely).
-    This baseline covers structured, high-confidence PII (emails, ID numbers, phone numbers). It
-    deliberately does not flag ordinary personal names in isolation: that would flag fictional
-    word-problem names as false positives, with no reliable way to tell them apart from a real
-    person without much heavier NER machinery than an ingest-time regex pass warrants."""
-    spans: set[tuple[int, int, str]] = set()
-    claimed: list[tuple[int, int]] = []
-    for pattern, kind in _PATTERNS:
-        for m in pattern.finditer(text):
-            if any(m.start() < e and s < m.end() for s, e in claimed):
-                continue  # already covered by a more specific pattern
-            spans.add((m.start(), m.end(), kind))
-            claimed.append((m.start(), m.end()))
-    return sorted(spans)
+    """Return (start, end, type) spans for high-confidence PII."""
+    spans: list[tuple[int, int, str]] = []
+
+    for match in _EMAIL_RE.finditer(text):
+        spans.append((match.start(), match.end(), "email"))
+
+    for match in _SSN_RE.finditer(text):
+        spans.append((match.start(), match.end(), "ssn"))
+
+    for match in _PHONE_RE.finditer(text):
+        spans.append((match.start(), match.end(), "phone"))
+
+    # Keep deterministic ordering and remove overlaps.
+    spans.sort(key=lambda item: (item[0], item[1], item[2]))
+
+    result: list[tuple[int, int, str]] = []
+    last_end = -1
+
+    for start, end, pii_type in spans:
+        if start >= last_end:
+            result.append((start, end, pii_type))
+            last_end = end
+
+    return result
 
 
 def redact(text: str) -> str:
-    """Replace each detected PII span with a typed placeholder, right-to-left so earlier spans'
-    character offsets stay valid as later ones are substituted."""
-    for start, end, kind in sorted(detect(text), reverse=True):
-        text = text[:start] + f"[REDACTED:{kind.upper()}]" + text[end:]
-    return text
+    """Replace detected PII spans with explicit redaction markers."""
+    spans = detect(text)
 
+    if not spans:
+        return text
 
-def _scrub_ctx(ctx: dict) -> dict:
-    """Redact whatever text this seam's ctx carries. Duck-typed across the three seams it's wired
-    to (AFTER_OCR gives {'chunks': list[Chunk]}, BEFORE_ANSWER/ON_LOG shapes are A3 territory) so
-    this handles all of them without erroring on a shape it doesn't recognise."""
-    if "chunks" in ctx:
-        for c in ctx["chunks"]:
-            if hasattr(c, "text"):
-                c.text = redact(c.text)
-    answer = ctx.get("answer")
-    if answer is not None and hasattr(answer, "text"):
-        answer.text = redact(answer.text)
-    if isinstance(ctx.get("message"), str):
-        ctx["message"] = redact(ctx["message"])
-    return ctx
+    replacements = {
+        "email": "[REDACTED_EMAIL]",
+        "ssn": "[REDACTED_SSN]",
+        "phone": "[REDACTED_PHONE]",
+    }
+
+    # Replace from right to left so original offsets remain valid.
+    result = text
+
+    for start, end, pii_type in reversed(spans):
+        result = result[:start] + replacements[pii_type] + result[end:]
+
+    return result
 
 
 def register(hooks: Any) -> None:
-    """Wire PII redaction into the pipeline: scrub extracted text before indexing, the outgoing
-    answer, and logs -- mandatory per STRUCTURE.md regardless of primary NFR."""
-    hooks.register(hooks.AFTER_OCR, _scrub_ctx)  # scrub extracted text before indexing
-    hooks.register(hooks.BEFORE_ANSWER, _scrub_ctx)  # scrub the outgoing answer
-    hooks.register(hooks.ON_LOG, _scrub_ctx)  # scrub logs
+    """Wire PII redaction into the pipeline hooks."""
+
+    def _scrub(ctx: dict) -> dict:
+        if not isinstance(ctx, dict):
+            return ctx
+
+        # Common scalar text fields.
+        for key in ("text", "answer", "log"):
+            value = ctx.get(key)
+
+            if isinstance(value, str):
+                ctx[key] = redact(value)
+
+            elif isinstance(value, list):
+                ctx[key] = [redact(item) if isinstance(item, str) else item for item in value]
+
+        # OCR/chunk collections.
+        chunks = ctx.get("chunks")
+
+        if isinstance(chunks, list):
+            for chunk in chunks:
+                if isinstance(chunk, dict):
+                    value = chunk.get("text")
+                    if isinstance(value, str):
+                        chunk["text"] = redact(value)
+
+                elif hasattr(chunk, "text") and isinstance(chunk.text, str):
+                    chunk.text = redact(chunk.text)
+
+        hooks_context = ctx.get("context")
+        if isinstance(hooks_context, str):
+            ctx["context"] = redact(hooks_context)
+
+        return ctx
+
+    hooks.register(hooks.AFTER_OCR, _scrub)
+    hooks.register(hooks.BEFORE_ANSWER, _scrub)
+    hooks.register(hooks.ON_LOG, _scrub)

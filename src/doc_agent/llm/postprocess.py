@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from ..contracts import *  # noqa
+from ..contracts import Answer
 
 
 def format_answer(raw: str, citations: list) -> Answer:
@@ -13,7 +13,10 @@ def format_answer(raw: str, citations: list) -> Answer:
 
 
 def register(hooks: Any) -> None:
-    """Wire the grounding / abstention gate. IMPLEMENT (abstain if answer unsupported by evidence)."""
+    """Wire the grounding / abstention gate.
+
+    IMPLEMENT (abstain if answer unsupported by evidence).
+    """
 
     def _ground(ctx: dict) -> dict:
         raise NotImplementedError("Grounding: abstain if unsupported; enforce citations")

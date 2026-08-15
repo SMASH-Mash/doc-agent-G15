@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     wandb_api_key: str = ""
 
     class Config:
-        env_file = ".env"  # pydantic-settings reads/overrides these fields from .env automatically
+        env_file = ".env"
 
 
 settings = Settings()  # import this; do not read os.environ elsewhere

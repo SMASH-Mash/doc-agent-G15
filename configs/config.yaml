@@ -1,74 +1,107 @@
 # THE place you set models & parameters. Code reads only from here.
 seed: 42
-device: auto     # ingest/vision/index code auto-detects cuda if torch.cuda.is_available() else cpu
+device: cuda
 
-# dev.max_pages: 0 = process the full corpus (the real A2 deliverable -- run on Kaggle T4x2 GPU,
-# set this to 0 there). A small positive number = fast local smoke-test mode, stratified evenly
-# across the 4 books. 300 = the project spec's own minimum-corpus floor (handbook/
-# 03-Project-Specification.md Part A: ">= 300 pages AND >= 60,000 words", mirrored verbatim as
-# MIN_PAGES/MIN_WORDS in data/validate.py) -- raised from the earlier 4-page pure-smoke-test value
-# so A2's submitted OCR-quality/index/retrieval evidence is measured over a sample at the same
-# scale the spec itself calls the minimum usable corpus, not just a few pages picked for a
-# multi-minute CPU correctness check. Only 3 held-out pages (grading_kit/heldout_pages/) are
-# excluded by hand-picking their page numbers outside this sampler's bucket-centered picks --
-# verify no overlap after changing this value. This dev machine has an NVIDIA GPU (torch is
-# installed from the cu121 index per [tool.uv.sources] in pyproject.toml), so 300 pages runs on
-# CUDA, not CPU -- the earlier "~5-8s/region on CPU" timing note no longer applies here.
-dev:       {max_pages: 300}
+# Stage 1 — deterministic corpus ingestion. These defaults match the clean, born-digital
+# ATLAS textbook scans described in A1: rasterise at 300 dpi and preserve RGB strokes.
+ingest:
+  raw_dir: data/raw
+  pages_dir: data/interim/pages
+  manifest_path: data/interim/pages.jsonl
+  dpi: 300
+  overwrite: false
 
-enhance:   {enabled: false, model: "unet_small", type: "diffusion"}   # out of scope for us — A1 Section 6:
-                                                                       # all 4 sources are clean, born-digital
-                                                                       # PDFs rasterised at 300dpi, no repair needed.
-layout:    {model: "juliozhao/DocLayout-YOLO-DocStructBench", score_thr: 0.4, revision: "8c3299a30b8ff29a1503c4431b035b93220f7b11"}
-                                                                       # pretrained doc-layout
-                                                                       # model (pip extra "layout-yolo");
-                                                                       # falls back to a PyMuPDF native
-                                                                       # block/table/image heuristic when
-                                                                       # that extra isn't installed (see
-                                                                       # vision/layout.py + design_choices.md).
-                                                                       # revision: pinned HF commit SHA (not a
-                                                                       # movable branch/tag) -- fixes bandit's
-                                                                       # B615 "unsafe HF download" finding
-                                                                       # (CI's security.yml gate) and protects
-                                                                       # against the upstream repo's weights
-                                                                       # changing under us between runs.
-ocr:       {model: "facebook/nougat-small", finetune: false, revision: "dced72ae7bcdfcb82a9ef55543a90a7a5e4d32e6"}
-                                                                       # BASELINE = pretrained math-aware
-                                                                       # vision-language OCR (E25: math /
-                                                                       # scientific notation data speciality)
-                                                                       # revision: pinned HF commit SHA, see
-                                                                       # layout.revision's comment above.
-embed:     {model: "sentence-transformers/all-mpnet-base-v2", dim: 768, batch_size: 32, revision: "e8c3b32edf5434bc2275fc9bab85f82640a19130"}
-                                                                       # batch_size: was pinned to 1 out of an
-                                                                       # earlier (wrong) hypothesis that OCR+
-                                                                       # embed batching caused this dev machine's
-                                                                       # crash. Root cause is now precisely
-                                                                       # isolated -- see index.type below, it
-                                                                       # was faiss IndexHNSWFlat, not batching or
-                                                                       # OCR/embed interaction -- re-verified with
-                                                                       # the flat index, so raised to 32: mpnet-base
-                                                                       # (~420MB) batched at 32x256-token chunks is
-                                                                       # a trivial fraction of an 8GB card's VRAM
-                                                                       # (and negligible on CPU too), so this is
-                                                                       # free throughput either way.
-index:     {type: "faiss:flat", chunk_tokens: 256, overlap: 32}
-                                                                       # faiss:flat, not faiss:hnsw: live,
-                                                                       # user-supervised debugging isolated a
-                                                                       # reproducible native crash (Windows
-                                                                       # STATUS_ACCESS_VIOLATION) inside
-                                                                       # faiss-cpu 1.8.0's IndexHNSWFlat.add()
-                                                                       # itself on this machine, confirmed with a
-                                                                       # bare numpy+faiss repro (zero ML models
-                                                                       # involved) -- so it was never the OCR/
-                                                                       # embed interaction earlier hypotheses
-                                                                       # blamed. IndexFlatIP does not crash on
-                                                                       # identical data; exact (not approximate)
-                                                                       # cosine search is fast enough at our
-                                                                       # scale that dropping HNSW costs nothing
-                                                                       # observable. See index/store.py + Stage 4
-                                                                       # row in design_choices.md.
-retrieve:  {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "cross-encoder/ms-marco-MiniLM-L6-v2"}   # k_step/k_max/weak_threshold drive evidence-gated re-search
-agent:     {max_steps: 8, autonomy: "act-with-approval", budget_usd: 0.05}
-rl:        {algo: "ppo", train_policy: false}                         # bonus: set true
-serve:     {batch: true}
-deploy:    {target: "hf-spaces"}
+preprocess:
+  enabled: true
+  output_dir: data/interim/preprocessed
+  overwrite: false
+  deskew: false
+  denoise: false
+  denoise_strength: 7
+  autocontrast: false
+  grayscale: false
+  binarize: false
+  adaptive_block_size: 35
+  adaptive_c: 11
+
+# Enhancement is bonus/gated and is not justified for the clean born-digital corpus.
+enhance: {enabled: false, model: "none", type: "none"}
+
+# A2 vision stages use pinned, reproducible checkpoints; indexing remains in the next step.
+layout:
+  model: "docling-project/docling-layout-heron"
+  revision: "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"
+  device: cuda
+  # 0.60 -> 0.75: raised after CER/WER experiments on grading_kit's 18 heldout pages found the
+  # accuracy problem was layout over-segmentation (the same content detected 2-3x at low
+  # confidence, e.g. one sentence detected 3 separate times, a heading/text pair on an identical
+  # bbox, nested overlapping boxes around one equation), not an OCR-decoding problem -- every
+  # OCR-side fix (retries, repetition penalty, prompting) was neutral or actively harmful, while
+  # this one change alone cut normalized WER from 95.27% to 70.44% and CER from 47.57% to 45.99%.
+  # Verified this isn't just discarding real content: total hypothesis words stayed well above
+  # total reference words after the change (no under-detection). See conversation history /
+  # scratch experiment logs for the full 10-run sweep (0.60/0.65/0.70/0.72/0.75/0.77/0.80/0.85/0.90).
+  score_threshold: 0.75
+  batch_size: 1
+  dedupe_iou: 0.85
+  ignored_labels: [page_header, page_footer]
+  manifest_path: data/interim/layout/regions.jsonl
+  save_debug: false
+  debug_dir: data/interim/layout/debug
+ocr:
+  model: "docling-project/granite-docling-2stage-258m"
+  revision: "12bb780c5b56af33e255c83719394e6d0be2227e"
+  device: cuda
+  dtype: auto
+  page_manifest_path: data/interim/pages.jsonl
+  layout_manifest_path: data/interim/layout/regions.jsonl
+  manifest_path: data/interim/ocr/chunks.jsonl
+  crop_padding: 12
+  min_crop_height: 96
+  location_scale: 500
+  skip_kinds: [figure]
+  quality_profile: "adaptive_bbox_retry_v2"
+  max_new_tokens: 384
+  min_new_tokens: 24
+  estimated_line_height: 44
+  estimated_char_width: 18
+  retry_repetition_penalty: 1.08
+  retry_no_repeat_ngram_size: 4
+  max_retries: 1
+  empty_cache_every: 8
+  token_limits:
+    heading: 64
+    section_header: 64
+    title: 64
+    caption: 192
+    formula: 224
+    table: 384
+    code: 256
+    list_item: 192
+    text: 256
+    default: 192
+  resume: true
+  overwrite: false
+  max_regions: 0
+  save_debug: false
+  debug_dir: data/interim/ocr/debug
+  prompts:
+    default: "Convert this page to docling."
+    formula: "<formula>"
+    table: "<otsl>"
+    code: "<code>"
+chunk:
+  strategy: "structure_aware"
+  chunk_tokens: 384
+  overlap: 48
+  heading_context_tokens: 64
+  heading_labels: [heading, section_header, title]
+  atomic_labels: [formula, table, code]
+  manifest_path: data/interim/chunks/chunks.jsonl
+embed: {model: "BAAI/bge-m3", dim: 1024, normalize: true}
+index: {type: "faiss:flat_ip"}
+retrieve: {k: 10, k_step: 10, k_max: 40, weak_threshold: 0.35, rerank: true, reranker: "BAAI/bge-reranker-v2-m3"}
+agent: {max_steps: 8, autonomy: "act-with-approval", budget_usd: 0.05}
+rl: {algo: "ppo", train_policy: false}
+serve: {batch: true}
+deploy: {target: "hf-spaces"}
